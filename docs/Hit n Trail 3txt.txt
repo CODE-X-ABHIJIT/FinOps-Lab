@@ -1,0 +1,545 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\WINDOWS\system32> wsl
+abhijit@ABHIJIT:/mnt/c/WINDOWS/system32$ kubectl get pods
+No resources found in default namespace.
+abhijit@ABHIJIT:/mnt/c/WINDOWS/system32$ kubectl get pods -n monitoring
+NAME                                                 READY   STATUS    RESTARTS       AGE
+opencost-7db8cfdb4-t8qtr                             0/2     Error     11 (24s ago)   4h
+prometheus-alertmanager-0                            1/1     Running   3 (24s ago)    4h48m
+prometheus-kube-state-metrics-79d4c77466-42kss       0/1     Running   5 (24s ago)    4h48m
+prometheus-prometheus-node-exporter-296cp            1/1     Running   3 (24s ago)    4h48m
+prometheus-prometheus-node-exporter-8nl58            1/1     Running   3 (24s ago)    4h48m
+prometheus-prometheus-node-exporter-dx7tz            1/1     Running   3 (24s ago)    4h48m
+prometheus-prometheus-node-exporter-gx8fc            1/1     Running   3 (24s ago)    4h48m
+prometheus-prometheus-pushgateway-55b4699767-j8mhm   0/1     Running   3 (24s ago)    4h48m
+prometheus-server-584c849f5-rfdsg                    1/2     Running   6 (24s ago)    4h48m
+abhijit@ABHIJIT:/mnt/c/WINDOWS/system32$ kubectl get deploy -n monitoring
+NAME                                READY   UP-TO-DATE   AVAILABLE   AGE
+opencost                            0/1     1            0           4h13m
+prometheus-kube-state-metrics       0/1     1            0           4h48m
+prometheus-prometheus-pushgateway   1/1     1            1           4h48m
+prometheus-server                   0/1     1            0           4h48m
+abhijit@ABHIJIT:/mnt/c/WINDOWS/system32$ kubectl get pods -n monitoring
+NAME                                                 READY   STATUS             RESTARTS       AGE
+opencost-7db8cfdb4-t8qtr                             0/2     CrashLoopBackOff   12 (11s ago)   4h
+prometheus-alertmanager-0                            1/1     Running            3 (56s ago)    4h48m
+prometheus-kube-state-metrics-79d4c77466-42kss       0/1     Running            6 (11s ago)    4h48m
+prometheus-prometheus-node-exporter-296cp            1/1     Running            3 (56s ago)    4h48m
+prometheus-prometheus-node-exporter-8nl58            1/1     Running            3 (56s ago)    4h48m
+prometheus-prometheus-node-exporter-dx7tz            1/1     Running            3 (56s ago)    4h48m
+prometheus-prometheus-node-exporter-gx8fc            1/1     Running            3 (56s ago)    4h48m
+prometheus-prometheus-pushgateway-55b4699767-j8mhm   1/1     Running            3 (56s ago)    4h48m
+prometheus-server-584c849f5-rfdsg                    2/2     Running            6 (56s ago)    4h48m
+abhijit@ABHIJIT:/mnt/c/WINDOWS/system32$ kubectl get pods -n monitoring
+NAME                                                 READY   STATUS             RESTARTS       AGE
+opencost-7db8cfdb4-t8qtr                             0/2     CrashLoopBackOff   12 (15s ago)   4h
+prometheus-alertmanager-0                            1/1     Running            3 (60s ago)    4h48m
+prometheus-kube-state-metrics-79d4c77466-42kss       0/1     Running            6 (15s ago)    4h48m
+prometheus-prometheus-node-exporter-296cp            1/1     Running            3 (60s ago)    4h48m
+prometheus-prometheus-node-exporter-8nl58            1/1     Running            3 (60s ago)    4h48m
+prometheus-prometheus-node-exporter-dx7tz            1/1     Running            3 (60s ago)    4h48m
+prometheus-prometheus-node-exporter-gx8fc            1/1     Running            3 (60s ago)    4h48m
+prometheus-prometheus-pushgateway-55b4699767-j8mhm   1/1     Running            3 (60s ago)    4h48m
+prometheus-server-584c849f5-rfdsg                    2/2     Running            6 (60s ago)    4h48m
+abhijit@ABHIJIT:/mnt/c/WINDOWS/system32$ kubectl describe pod opencost-7db8cfdb4-t8qtr -n monitoring
+Name:             opencost-7db8cfdb4-t8qtr
+Namespace:        monitoring
+Priority:         0
+Service Account:  opencost
+Node:             finops-lab-worker/172.18.0.5
+Start Time:       Sun, 14 Jun 2026 07:06:33 +0000
+Labels:           app.kubernetes.io/instance=opencost
+                  app.kubernetes.io/name=opencost
+                  pod-template-hash=7db8cfdb4
+Annotations:      <none>
+Status:           Running
+IP:               10.244.3.3
+IPs:
+  IP:           10.244.3.3
+Controlled By:  ReplicaSet/opencost-7db8cfdb4
+Containers:
+  opencost:
+    Container ID:   containerd://f33faf288a4957d617d345f4e2c738e218c3e0bb48e3a51c171b4c833ce2dd3c
+    Image:          ghcr.io/opencost/opencost:1.120.3@sha256:9f282400e59a4fc886e5fa3bca3c777b9dcae866b781641ca1d1271525d15f72
+    Image ID:       ghcr.io/opencost/opencost@sha256:9f282400e59a4fc886e5fa3bca3c777b9dcae866b781641ca1d1271525d15f72
+    Ports:          9003/TCP (http), 8081/TCP (mcp-server)
+    Host Ports:     0/TCP (http), 0/TCP (mcp-server)
+    State:          Running
+      Started:      Sun, 14 Jun 2026 11:07:17 +0000
+    Ready:          True
+    Restart Count:  6
+    Limits:
+      memory:  1Gi
+    Requests:
+      cpu:      10m
+      memory:   55Mi
+    Liveness:   http-get http://:9003/healthz delay=10s timeout=1s period=20s #success=1 #failure=3
+    Readiness:  http-get http://:9003/healthz delay=10s timeout=1s period=10s #success=1 #failure=3
+    Startup:    http-get http://:9003/healthz delay=10s timeout=1s period=5s #success=1 #failure=30
+    Environment:
+      LOG_LEVEL:                            info
+      CUSTOM_COST_ENABLED:                  false
+      INSTALL_NAMESPACE:                    monitoring
+      PROMETHEUS_QUERY_RESOLUTION_SECONDS:  300
+      API_PORT:                             9003
+      PROMETHEUS_SERVER_ENDPOINT:           http://prometheus-server.monitoring.svc.cluster.local:80
+      INSECURE_SKIP_VERIFY:                 false
+      CLUSTER_ID:                           finops-lab
+      RESOLUTION_1D_RETENTION:              15
+      RESOLUTION_1H_RETENTION:              49
+      CLOUD_COST_ENABLED:                   false
+      CLOUD_COST_MONTH_TO_DATE_INTERVAL:    6
+      CLOUD_COST_REFRESH_RATE_HOURS:        6
+      CLOUD_COST_QUERY_WINDOW_DAYS:         7
+      CLOUD_COST_RUN_WINDOW_DAYS:           3
+      MCP_SERVER_ENABLED:                   true
+      MCP_HTTP_PORT:                        8081
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-prpt9 (ro)
+  opencost-ui:
+    Container ID:   containerd://1521a79b8c96fd4b03af1ec35191d267082aafc18ce7e541645ab7f433ea8b10
+    Image:          ghcr.io/opencost/opencost-ui:1.120.3@sha256:12b6e7a844c17f9a4019cdd55e5bfe6c720c1a0961d8a9be2333a97c69bffcc9
+    Image ID:       ghcr.io/opencost/opencost-ui@sha256:12b6e7a844c17f9a4019cdd55e5bfe6c720c1a0961d8a9be2333a97c69bffcc9
+    Port:           9090/TCP (http-ui)
+    Host Port:      0/TCP (http-ui)
+    State:          Running
+      Started:      Sun, 14 Jun 2026 11:06:57 +0000
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Sun, 14 Jun 2026 11:06:25 +0000
+      Finished:     Sun, 14 Jun 2026 11:06:34 +0000
+    Ready:          True
+    Restart Count:  7
+    Limits:
+      memory:  1Gi
+    Requests:
+      cpu:      10m
+      memory:   55Mi
+    Liveness:   http-get http://:9090/healthz delay=30s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:9090/healthz delay=30s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      API_PORT:  9003
+      UI_PORT:   9090
+    Mounts:
+      /etc/nginx/conf.d/default.nginx.conf from opencost-ui-nginx-config-volume (rw,path="default.nginx.conf")
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-prpt9 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  opencost-ui-nginx-config-volume:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      opencost-ui-nginx-config
+    Optional:  false
+  kube-api-access-prpt9:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason       Age                 From     Message
+  ----     ------       ----                ----     -------
+  Warning  Unhealthy    73m (x2 over 140m)  kubelet  spec.containers{opencost}: Readiness probe failed: Get "http://10.244.3.4:9003/healthz": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+  Warning  FailedMount  67m                 kubelet  MountVolume.SetUp failed for volume "opencost-ui-nginx-config-volume" : failed to sync configmap cache: timed out waiting for the condition
+  Warning  FailedMount  67m                 kubelet  MountVolume.SetUp failed for volume "kube-api-access-prpt9" : [failed to fetch token: serviceaccounts "opencost" is forbidden: User "system:node:finops-lab-worker" cannot create resource "serviceaccounts/token" in API group "" in the namespace "monitoring": no relationship found between node 'finops-lab-worker' and this object
+RBAC: [clusterrole.rbac.authorization.k8s.io "system:discovery" not found, clusterrole.rbac.authorization.k8s.io "system:basic-user" not found, clusterrole.rbac.authorization.k8s.io "system:public-info-viewer" not found, clusterrole.rbac.authorization.k8s.io "system:certificates.k8s.io:certificatesigningrequests:selfnodeclient" not found], failed to sync configmap cache: timed out waiting for the condition]
+  Normal   SandboxChanged  67m                kubelet  Pod sandbox changed, it will be killed and re-created.
+  Warning  BackOff         67m (x2 over 67m)  kubelet  spec.containers{opencost-ui}: Back-off restarting failed container opencost-ui in pod opencost-7db8cfdb4-t8qtr_monitoring(adb6fc71-0470-4756-a60f-64dde6b9cd38)
+  Normal   Pulled          66m (x2 over 67m)  kubelet  spec.containers{opencost-ui}: Container image "ghcr.io/opencost/opencost-ui:1.120.3@sha256:12b6e7a844c17f9a4019cdd55e5bfe6c720c1a0961d8a9be2333a97c69bffcc9" already present on machine
+  Normal   Created         66m (x2 over 67m)  kubelet  spec.containers{opencost-ui}: Created container: opencost-ui
+  Normal   Started         66m (x2 over 67m)  kubelet  spec.containers{opencost-ui}: Started container opencost-ui
+  Warning  Unhealthy       66m (x6 over 67m)  kubelet  spec.containers{opencost}: Startup probe failed: Get "http://10.244.3.2:9003/healthz": dial tcp 10.244.3.2:9003: connect: connection refused
+  Warning  BackOff         66m (x3 over 66m)  kubelet  spec.containers{opencost}: Back-off restarting failed container opencost in pod opencost-7db8cfdb4-t8qtr_monitoring(adb6fc71-0470-4756-a60f-64dde6b9cd38)
+  Normal   Created         66m (x2 over 67m)  kubelet  spec.containers{opencost}: Created container: opencost
+  Normal   Pulled          66m (x2 over 67m)  kubelet  spec.containers{opencost}: Container image "ghcr.io/opencost/opencost:1.120.3@sha256:9f282400e59a4fc886e5fa3bca3c777b9dcae866b781641ca1d1271525d15f72" already present on machine
+  Normal   Started         66m (x2 over 67m)  kubelet  spec.containers{opencost}: Started container opencost
+  Normal   SandboxChanged  84s                kubelet  Pod sandbox changed, it will be killed and re-created.
+  Warning  BackOff         62s (x2 over 69s)  kubelet  spec.containers{opencost-ui}: Back-off restarting failed container opencost-ui in pod opencost-7db8cfdb4-t8qtr_monitoring(adb6fc71-0470-4756-a60f-64dde6b9cd38)
+  Normal   Pulled          50s (x2 over 81s)  kubelet  spec.containers{opencost-ui}: Container image "ghcr.io/opencost/opencost-ui:1.120.3@sha256:12b6e7a844c17f9a4019cdd55e5bfe6c720c1a0961d8a9be2333a97c69bffcc9" already present on machine
+  Normal   Created         49s (x2 over 80s)  kubelet  spec.containers{opencost-ui}: Created container: opencost-ui
+  Normal   Started         48s (x2 over 79s)  kubelet  spec.containers{opencost-ui}: Started container opencost-ui
+  Warning  Unhealthy       48s (x5 over 69s)  kubelet  spec.containers{opencost}: Startup probe failed: Get "http://10.244.3.3:9003/healthz": dial tcp 10.244.3.3:9003: connect: connection refused
+  Warning  BackOff         43s (x2 over 45s)  kubelet  spec.containers{opencost}: Back-off restarting failed container opencost in pod opencost-7db8cfdb4-t8qtr_monitoring(adb6fc71-0470-4756-a60f-64dde6b9cd38)
+  Normal   Pulled          29s (x2 over 82s)  kubelet  spec.containers{opencost}: Container image "ghcr.io/opencost/opencost:1.120.3@sha256:9f282400e59a4fc886e5fa3bca3c777b9dcae866b781641ca1d1271525d15f72" already present on machine
+  Normal   Created         29s (x2 over 81s)  kubelet  spec.containers{opencost}: Created container: opencost
+  Normal   Started         28s (x2 over 81s)  kubelet  spec.containers{opencost}: Started container opencost
+abhijit@ABHIJIT:/mnt/c/WINDOWS/system32$ kubectl get pods -n monitoring
+NAME                                                 READY   STATUS    RESTARTS       AGE
+opencost-7db8cfdb4-t8qtr                             2/2     Running   13 (90s ago)   4h1m
+prometheus-alertmanager-0                            1/1     Running   3 (110s ago)   4h49m
+prometheus-kube-state-metrics-79d4c77466-42kss       1/1     Running   6 (65s ago)    4h49m
+prometheus-prometheus-node-exporter-296cp            1/1     Running   3 (110s ago)   4h49m
+prometheus-prometheus-node-exporter-8nl58            1/1     Running   3 (110s ago)   4h49m
+prometheus-prometheus-node-exporter-dx7tz            1/1     Running   3 (110s ago)   4h49m
+prometheus-prometheus-node-exporter-gx8fc            1/1     Running   3 (110s ago)   4h49m
+prometheus-prometheus-pushgateway-55b4699767-j8mhm   1/1     Running   3 (110s ago)   4h49m
+prometheus-server-584c849f5-rfdsg                    2/2     Running   6 (110s ago)   4h49m
+abhijit@ABHIJIT:/mnt/c/WINDOWS/system32$ kubectl get svc -n monitoring
+NAME                                  TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                      AGE
+opencost                              ClusterIP   10.96.52.228   <none>        9003/TCP,8081/TCP,9090/TCP   4h19m
+prometheus-alertmanager               ClusterIP   10.96.26.57    <none>        9093/TCP                     4h54m
+prometheus-alertmanager-headless      ClusterIP   None           <none>        9093/TCP                     4h54m
+prometheus-kube-state-metrics         ClusterIP   10.96.170.83   <none>        8080/TCP                     4h54m
+prometheus-prometheus-node-exporter   ClusterIP   10.96.8.104    <none>        9100/TCP                     4h54m
+prometheus-prometheus-pushgateway     ClusterIP   10.96.144.37   <none>        9091/TCP                     4h54m
+prometheus-server                     ClusterIP   10.96.29.110   <none>        80/TCP                       4h54m
+abhijit@ABHIJIT:/mnt/c/WINDOWS/system32$ kubectl get deploy -n monitoring
+NAME                                READY   UP-TO-DATE   AVAILABLE   AGE
+opencost                            1/1     1            1           4h19m
+prometheus-kube-state-metrics       1/1     1            1           4h55m
+prometheus-prometheus-pushgateway   1/1     1            1           4h55m
+prometheus-server                   1/1     1            1           4h55m
+abhijit@ABHIJIT:/mnt/c/WINDOWS/system32$ kubectl get clusterrole | grep system:
+system:aggregate-to-admin                                              2026-06-13T18:31:51Z
+system:aggregate-to-edit                                               2026-06-13T18:31:51Z
+system:aggregate-to-view                                               2026-06-13T18:31:51Z
+system:aggregated-metrics-reader                                       2026-06-13T18:32:51Z
+system:auth-delegator                                                  2026-06-13T18:31:51Z
+system:basic-user                                                      2026-06-13T18:31:51Z
+system:certificates.k8s.io:certificatesigningrequests:nodeclient       2026-06-13T18:31:51Z
+system:certificates.k8s.io:certificatesigningrequests:selfnodeclient   2026-06-13T18:31:51Z
+system:certificates.k8s.io:kube-apiserver-client-approver              2026-06-13T18:31:51Z
+system:certificates.k8s.io:kube-apiserver-client-kubelet-approver      2026-06-13T18:31:51Z
+system:certificates.k8s.io:kubelet-serving-approver                    2026-06-13T18:31:51Z
+system:certificates.k8s.io:legacy-unknown-approver                     2026-06-13T18:31:51Z
+system:controller:attachdetach-controller                              2026-06-13T18:31:51Z
+system:controller:certificate-controller                               2026-06-13T18:31:51Z
+system:controller:clusterrole-aggregation-controller                   2026-06-13T18:31:51Z
+system:controller:cronjob-controller                                   2026-06-13T18:31:51Z
+system:controller:daemon-set-controller                                2026-06-13T18:31:51Z
+system:controller:deployment-controller                                2026-06-13T18:31:51Z
+system:controller:disruption-controller                                2026-06-13T18:31:51Z
+system:controller:endpoint-controller                                  2026-06-13T18:31:51Z
+system:controller:endpointslice-controller                             2026-06-13T18:31:51Z
+system:controller:endpointslicemirroring-controller                    2026-06-13T18:31:51Z
+system:controller:ephemeral-volume-controller                          2026-06-13T18:31:51Z
+system:controller:expand-controller                                    2026-06-13T18:31:51Z
+system:controller:generic-garbage-collector                            2026-06-13T18:31:51Z
+system:controller:horizontal-pod-autoscaler                            2026-06-13T18:31:51Z
+system:controller:job-controller                                       2026-06-13T18:31:51Z
+system:controller:legacy-service-account-token-cleaner                 2026-06-13T18:31:51Z
+system:controller:namespace-controller                                 2026-06-13T18:31:51Z
+system:controller:node-controller                                      2026-06-13T18:31:51Z
+system:controller:persistent-volume-binder                             2026-06-13T18:31:51Z
+system:controller:pod-garbage-collector                                2026-06-13T18:31:51Z
+system:controller:pv-protection-controller                             2026-06-13T18:31:51Z
+system:controller:pvc-protection-controller                            2026-06-13T18:31:51Z
+system:controller:replicaset-controller                                2026-06-13T18:31:51Z
+system:controller:replication-controller                               2026-06-13T18:31:51Z
+system:controller:resource-claim-controller                            2026-06-13T18:31:51Z
+system:controller:resourcequota-controller                             2026-06-13T18:31:51Z
+system:controller:root-ca-cert-publisher                               2026-06-13T18:31:51Z
+system:controller:route-controller                                     2026-06-13T18:31:51Z
+system:controller:selinux-warning-controller                           2026-06-13T18:31:51Z
+system:controller:service-account-controller                           2026-06-13T18:31:51Z
+system:controller:service-cidrs-controller                             2026-06-13T18:31:51Z
+system:controller:service-controller                                   2026-06-13T18:31:51Z
+system:controller:statefulset-controller                               2026-06-13T18:31:51Z
+system:controller:ttl-after-finished-controller                        2026-06-13T18:31:51Z
+system:controller:ttl-controller                                       2026-06-13T18:31:51Z
+system:controller:validatingadmissionpolicy-status-controller          2026-06-13T18:31:51Z
+system:controller:volumeattributesclass-protection-controller          2026-06-13T18:31:51Z
+system:coredns                                                         2026-06-13T18:31:53Z
+system:discovery                                                       2026-06-13T18:31:51Z
+system:heapster                                                        2026-06-13T18:31:51Z
+system:kube-aggregator                                                 2026-06-13T18:31:51Z
+system:kube-controller-manager                                         2026-06-13T18:31:51Z
+system:kube-dns                                                        2026-06-13T18:31:51Z
+system:kube-scheduler                                                  2026-06-13T18:31:51Z
+system:kubelet-api-admin                                               2026-06-13T18:31:51Z
+system:metrics-server                                                  2026-06-13T18:32:51Z
+system:monitoring                                                      2026-06-13T18:31:51Z
+system:node                                                            2026-06-13T18:31:51Z
+system:node-bootstrapper                                               2026-06-13T18:31:51Z
+system:node-problem-detector                                           2026-06-13T18:31:51Z
+system:node-proxier                                                    2026-06-13T18:31:51Z
+system:persistent-volume-provisioner                                   2026-06-13T18:31:51Z
+system:public-info-viewer                                              2026-06-13T18:31:51Z
+system:service-account-issuer-discovery                                2026-06-13T18:31:51Z
+system:volume-scheduler                                                2026-06-13T18:31:51Z
+abhijit@ABHIJIT:/mnt/c/WINDOWS/system32$ kubectl get pods -n monitoring
+NAME                                                 READY   STATUS    RESTARTS        AGE
+opencost-7db8cfdb4-t8qtr                             2/2     Running   13 (13m ago)    4h13m
+prometheus-alertmanager-0                            1/1     Running   3 (14m ago)     5h1m
+prometheus-kube-state-metrics-79d4c77466-42kss       1/1     Running   6 (13m ago)     5h1m
+prometheus-prometheus-node-exporter-296cp            1/1     Running   4 (4m13s ago)   5h1m
+prometheus-prometheus-node-exporter-8nl58            1/1     Running   4 (4m12s ago)   5h1m
+prometheus-prometheus-node-exporter-dx7tz            1/1     Running   3 (14m ago)     5h1m
+prometheus-prometheus-node-exporter-gx8fc            1/1     Running   3 (14m ago)     5h1m
+prometheus-prometheus-pushgateway-55b4699767-j8mhm   1/1     Running   3 (14m ago)     5h1m
+prometheus-server-584c849f5-rfdsg                    2/2     Running   6 (14m ago)     5h1m
+abhijit@ABHIJIT:/mnt/c/WINDOWS/system32$ docker ps
+CONTAINER ID   IMAGE                  COMMAND                  CREATED        STATUS          PORTS                       NAMES
+3a734ea7094a   kindest/node:v1.34.0   "/usr/local/bin/entr…"   17 hours ago   Up 14 minutes   127.0.0.1:41863->6443/tcp   finops-lab-control-plane
+d8eabb0baab4   kindest/node:v1.34.0   "/usr/local/bin/entr…"   17 hours ago   Up 14 minutes                               finops-lab-worker2
+e89d58b58126   kindest/node:v1.34.0   "/usr/local/bin/entr…"   17 hours ago   Up 14 minutes                               finops-lab-worker3
+96275721cd10   kindest/node:v1.34.0   "/usr/local/bin/entr…"   17 hours ago   Up 14 minutes                               finops-lab-worker
+abhijit@ABHIJIT:/mnt/c/WINDOWS/system32$ kubectl describe node finops-lab-worker2
+Name:               finops-lab-worker2
+Roles:              <none>
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/os=linux
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=finops-lab-worker2
+                    kubernetes.io/os=linux
+Annotations:        node.alpha.kubernetes.io/ttl: 0
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Sat, 13 Jun 2026 18:32:10 +0000
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  finops-lab-worker2
+  AcquireTime:     <unset>
+  RenewTime:       Sun, 14 Jun 2026 11:21:33 +0000
+Conditions:
+  Type             Status  LastHeartbeatTime                 LastTransitionTime                Reason                       Message
+  ----             ------  -----------------                 ------------------                ------                       -------
+  MemoryPressure   False   Sun, 14 Jun 2026 11:20:37 +0000   Sat, 13 Jun 2026 18:32:10 +0000   KubeletHasSufficientMemory   kubelet has sufficient memory available
+  DiskPressure     False   Sun, 14 Jun 2026 11:20:37 +0000   Sat, 13 Jun 2026 18:32:10 +0000   KubeletHasNoDiskPressure     kubelet has no disk pressure
+  PIDPressure      False   Sun, 14 Jun 2026 11:20:37 +0000   Sat, 13 Jun 2026 18:32:10 +0000   KubeletHasSufficientPID      kubelet has sufficient PID available
+  Ready            True    Sun, 14 Jun 2026 11:20:37 +0000   Sat, 13 Jun 2026 18:32:30 +0000   KubeletReady                 kubelet is posting ready status
+Addresses:
+  InternalIP:  172.18.0.2
+  Hostname:    finops-lab-worker2
+Capacity:
+  cpu:                8
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             3842272Ki
+  pods:               110
+Allocatable:
+  cpu:                8
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             3842272Ki
+  pods:               110
+System Info:
+  Machine ID:                 bf251e44960543c28bf02ab191e6fb8d
+  System UUID:                bf251e44960543c28bf02ab191e6fb8d
+  Boot ID:                    73a489be-4558-40ff-8dba-7c6a3250dcab
+  Kernel Version:             6.6.87.2-microsoft-standard-WSL2
+  OS Image:                   Debian GNU/Linux 12 (bookworm)
+  Operating System:           linux
+  Architecture:               amd64
+  Container Runtime Version:  containerd://2.1.3
+  Kubelet Version:            v1.34.0
+PodCIDR:                      10.244.2.0/24
+PodCIDRs:                     10.244.2.0/24
+ProviderID:                   kind://docker/finops-lab/finops-lab-worker2
+Non-terminated Pods:          (10 in total)
+  Namespace                   Name                                                  CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                   ----                                                  ------------  ----------  ---------------  -------------  ---
+  database                    mysql-5d4d56489-7bfbg                                 1 (12%)       4 (50%)     1Gi (27%)        4Gi (109%)     5h24m
+  frontend                    nginx-69cddb8756-7lth2                                1 (12%)       4 (50%)     1Gi (27%)        4Gi (109%)     5h24m
+  kube-system                 kindnet-rsgmd                                         100m (1%)     100m (1%)   50Mi (1%)        50Mi (1%)      16h
+  kube-system                 kube-proxy-c8l7m                                      0 (0%)        0 (0%)      0 (0%)           0 (0%)         16h
+  kube-system                 metrics-server-5b57c547cb-x88n2                       100m (1%)     0 (0%)      200Mi (5%)       0 (0%)         16h
+  loadtest                    stress-generator-646fbfcc84-94m2g                     500m (6%)     2 (25%)     512Mi (13%)      1Gi (27%)      5h24m
+  monitoring                  prometheus-kube-state-metrics-79d4c77466-42kss        0 (0%)        0 (0%)      0 (0%)           0 (0%)         5h3m
+  monitoring                  prometheus-prometheus-node-exporter-8nl58             0 (0%)        0 (0%)      0 (0%)           0 (0%)         5h3m
+  monitoring                  prometheus-prometheus-pushgateway-55b4699767-j8mhm    0 (0%)        0 (0%)      0 (0%)           0 (0%)         5h3m
+  monitoring                  prometheus-server-584c849f5-rfdsg                     0 (0%)        0 (0%)      0 (0%)           0 (0%)         5h3m
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests      Limits
+  --------           --------      ------
+  cpu                2700m (33%)   10100m (126%)
+  memory             2810Mi (74%)  9266Mi (246%)
+  ephemeral-storage  0 (0%)        0 (0%)
+  hugepages-1Gi      0 (0%)        0 (0%)
+  hugepages-2Mi      0 (0%)        0 (0%)
+Events:
+  Type     Reason                   Age                From             Message
+  ----     ------                   ----               ----             -------
+  Normal   Starting                 15m                kube-proxy
+  Normal   Starting                 81m                kube-proxy
+  Normal   NodeAllocatableEnforced  81m                kubelet          Updated Node Allocatable limit across pods
+  Normal   Starting                 81m                kubelet          Starting kubelet.
+  Normal   NodeHasSufficientPID     81m (x7 over 81m)  kubelet          Node finops-lab-worker2 status is now: NodeHasSufficientPID
+  Normal   NodeHasSufficientMemory  81m (x8 over 81m)  kubelet          Node finops-lab-worker2 status is now: NodeHasSufficientMemory
+  Normal   NodeHasNoDiskPressure    81m (x8 over 81m)  kubelet          Node finops-lab-worker2 status is now: NodeHasNoDiskPressure
+  Warning  Rebooted                 81m                kubelet          Node finops-lab-worker2 has been rebooted, boot id: d0cec29e-922d-48e0-9e65-9f310690ac9b
+  Normal   RegisteredNode           80m                node-controller  Node finops-lab-worker2 event: Registered Node finops-lab-worker2 in Controller
+  Normal   Starting                 15m                kubelet          Starting kubelet.
+  Normal   NodeAllocatableEnforced  15m                kubelet          Updated Node Allocatable limit across pods
+  Normal   NodeHasSufficientPID     15m (x7 over 15m)  kubelet          Node finops-lab-worker2 status is now: NodeHasSufficientPID
+  Normal   NodeHasSufficientMemory  15m (x8 over 15m)  kubelet          Node finops-lab-worker2 status is now: NodeHasSufficientMemory
+  Normal   NodeHasNoDiskPressure    15m (x8 over 15m)  kubelet          Node finops-lab-worker2 status is now: NodeHasNoDiskPressure
+  Warning  Rebooted                 15m                kubelet          Node finops-lab-worker2 has been rebooted, boot id: 73a489be-4558-40ff-8dba-7c6a3250dcab
+  Normal   RegisteredNode           15m                node-controller  Node finops-lab-worker2 event: Registered Node finops-lab-worker2 in Controller
+  Normal   RegisteredNode           5m6s               node-controller  Node finops-lab-worker2 event: Registered Node finops-lab-worker2 in Controller
+abhijit@ABHIJIT:/mnt/c/WINDOWS/system32$ kubectl port-forward -n monitoring svc/opencost 9090:9090
+Forwarding from 127.0.0.1:9090 -> 9090
+Forwarding from [::1]:9090 -> 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+E0614 11:24:05.590773   32948 portforward.go:489] "Unhandled Error" err="error copying from remote stream to local connection: readfrom tcp6 [::1]:9090->[::1]:49260: write tcp6 [::1]:9090->[::1]:49260: write: broken pipe"
+E0614 11:24:05.602363   32948 portforward.go:489] "Unhandled Error" err="error copying from remote stream to local connection: readfrom tcp6 [::1]:9090->[::1]:40908: write tcp6 [::1]:9090->[::1]:40908: write: broken pipe"
+Handling connection for 9090
+Handling connection for 9090
+Handling connection for 9090
+^Cabhijit@ABHIJIT:/mnt/c/WINDOWS/system32kubectl edit deployment nginx
+Error from server (NotFound): deployments.apps "nginx" not found
+abhijit@ABHIJIT:/mnt/c/WINDOWS/system32$ cd ..
+abhijit@ABHIJIT:/mnt/c/WINDOWS$ cd ..
+abhijit@ABHIJIT:/mnt/c$ cd d
+demo/  dull/  dummy/
+abhijit@ABHIJIT:/mnt/c$ cd finops-lab/
+abhijit@ABHIJIT:/mnt/c/finops-lab$ cd apps/
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl edit deployment nginx
+Error from server (NotFound): deployments.apps "nginx" not found
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl edit deployment nginx -n monitoring
+Error from server (NotFound): deployments.apps "nginx" not found
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get deply -n monitoring
+error: the server doesn't have a resource type "deply"
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get deploy -n monitoring
+NAME                                READY   UP-TO-DATE   AVAILABLE   AGE
+opencost                            1/1     1            1           4h33m
+prometheus-kube-state-metrics       1/1     1            1           5h8m
+prometheus-prometheus-pushgateway   1/1     1            1           5h8m
+prometheus-server                   1/1     1            1           5h8m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get ns
+NAME                 STATUS   AGE
+backend              Active   5h51m
+database             Active   5h50m
+default              Active   16h
+frontend             Active   5h51m
+kube-node-lease      Active   16h
+kube-public          Active   16h
+kube-system          Active   16h
+loadtest             Active   5h50m
+local-path-storage   Active   16h
+monitoring           Active   5h13m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl rollout status deployment/nginx
+Error from server (NotFound): deployments.apps "nginx" not found
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl rollout status deployment/nginx-wasteful
+Error from server (NotFound): deployments.apps "nginx-wasteful" not found
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl deploy -A
+error: unknown command "deploy" for "kubectl"
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get deploy -A
+NAMESPACE            NAME                                READY   UP-TO-DATE   AVAILABLE   AGE
+backend              java-app                            2/2     2            2           5h35m
+backend              redis                               2/2     2            2           5h35m
+database             mysql                               1/1     1            1           5h35m
+frontend             nginx                               3/3     3            3           5h35m
+kube-system          coredns                             2/2     2            2           17h
+kube-system          metrics-server                      1/1     1            1           16h
+loadtest             stress-generator                    1/1     1            1           5h35m
+local-path-storage   local-path-provisioner              1/1     1            1           17h
+monitoring           opencost                            1/1     1            1           4h38m
+monitoring           prometheus-kube-state-metrics       1/1     1            1           5h14m
+monitoring           prometheus-prometheus-pushgateway   1/1     1            1           5h14m
+monitoring           prometheus-server                   1/1     1            1           5h14m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl rollout status deployment/nginx -n frontend
+deployment "nginx" successfully rolled out
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl rollout status deployment/java-app -n backtend
+Error from server (NotFound): namespaces "backtend" not found
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl rollout status deployment/java-app -n backend
+deployment "java-app" successfully rolled out
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl rollout status deployment/redis -n backend
+deployment "redis" successfully rolled out
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl rollout status deployment/mysql -n database
+deployment "mysql" successfully rolled out
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get deploy -A -o wide
+NAMESPACE            NAME                                READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS                                             IMAGES                                                                                                                                                                                                                   SELECTOR
+backend              java-app                            2/2     2            2           5h40m   java-app                                               springio/gs-spring-boot-docker                                                                                                                                                                                           app=java-app
+backend              redis                               2/2     2            2           5h40m   redis                                                  redis                                                                                                                                                                                                                    app=redis
+database             mysql                               1/1     1            1           5h40m   mysql                                                  mysql:8.0                                                                                                                                                                                                                app=mysql
+frontend             nginx                               3/3     3            3           5h40m   nginx                                                  nginx                                                                                                                                                                                                                    app=nginx
+kube-system          coredns                             2/2     2            2           17h     coredns                                                registry.k8s.io/coredns/coredns:v1.12.1                                                                                                                                                                                  k8s-app=kube-dns
+kube-system          metrics-server                      1/1     1            1           17h     metrics-server                                         registry.k8s.io/metrics-server/metrics-server:v0.8.1                                                                                                                                                                     k8s-app=metrics-server
+loadtest             stress-generator                    1/1     1            1           5h40m   stress                                                 polinux/stress                                                                                                                                                                                                           app=stress
+local-path-storage   local-path-provisioner              1/1     1            1           17h     local-path-provisioner                                 docker.io/kindest/local-path-provisioner:v20250214-acbabc1a                                                                                                                                                              app=local-path-provisioner
+monitoring           opencost                            1/1     1            1           4h43m   opencost,opencost-ui                                   ghcr.io/opencost/opencost:1.120.3@sha256:9f282400e59a4fc886e5fa3bca3c777b9dcae866b781641ca1d1271525d15f72,ghcr.io/opencost/opencost-ui:1.120.3@sha256:12b6e7a844c17f9a4019cdd55e5bfe6c720c1a0961d8a9be2333a97c69bffcc9   app.kubernetes.io/instance=opencost,app.kubernetes.io/name=opencost
+monitoring           prometheus-kube-state-metrics       1/1     1            1           5h19m   kube-state-metrics                                     registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.19.0                                                                                                                                                            app.kubernetes.io/instance=prometheus,app.kubernetes.io/name=kube-state-metrics
+monitoring           prometheus-prometheus-pushgateway   1/1     1            1           5h19m   pushgateway                                            quay.io/prometheus/pushgateway:v1.11.3                                                                                                                                                                                   app.kubernetes.io/instance=prometheus,app.kubernetes.io/name=prometheus-pushgateway
+monitoring           prometheus-server                   1/1     1            1           5h19m   prometheus-server-configmap-reload,prometheus-server   quay.io/prometheus-operator/prometheus-config-reloader:v0.91.0,quay.io/prometheus/prometheus:v3.12.0                                                                                                                     app.kubernetes.io/component=server,app.kubernetes.io/instance=prometheus,app.kubernetes.io/name=prometheus
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl top node
+NAME                       CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)
+finops-lab-control-plane   453m         5%       594Mi           15%
+finops-lab-worker          164m         2%       393Mi           10%
+finops-lab-worker2         2174m        27%      819Mi           21%
+finops-lab-worker3         151m         1%       358Mi           9%
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl top pod
+No resources found in default namespace.
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl top pod -A
+NAMESPACE            NAME                                                 CPU(cores)   MEMORY(bytes)
+backend              java-app-7b46d8b69d-4fw4x                            3m           206Mi
+backend              java-app-7b46d8b69d-8cxjk                            4m           208Mi
+backend              redis-7d454cb484-cjphk                               3m           6Mi
+backend              redis-7d454cb484-sr5l4                               3m           6Mi
+database             mysql-5d4d56489-7bfbg                                11m          356Mi
+frontend             nginx-69cddb8756-7lth2                               0m           7Mi
+frontend             nginx-69cddb8756-dgd9b                               0m           7Mi
+frontend             nginx-69cddb8756-mw5rf                               0m           7Mi
+kube-system          coredns-66bc5c9577-f6pjb                             9m           20Mi
+kube-system          coredns-66bc5c9577-txq5g                             5m           21Mi
+kube-system          etcd-finops-lab-control-plane                        50m          57Mi
+kube-system          kindnet-99nnr                                        5m           16Mi
+kube-system          kindnet-bfk4h                                        5m           18Mi
+kube-system          kindnet-h7ddx                                        5m           15Mi
+kube-system          kindnet-rsgmd                                        6m           15Mi
+kube-system          kube-apiserver-finops-lab-control-plane              102m         266Mi
+kube-system          kube-controller-manager-finops-lab-control-plane     46m          50Mi
+kube-system          kube-proxy-4xvrm                                     3m           14Mi
+kube-system          kube-proxy-c8l7m                                     5m           15Mi
+kube-system          kube-proxy-ld4rs                                     11m          13Mi
+kube-system          kube-proxy-nnm6d                                     5m           13Mi
+kube-system          kube-scheduler-finops-lab-control-plane              19m          27Mi
+kube-system          metrics-server-5b57c547cb-x88n2                      21m          30Mi
+loadtest             stress-generator-646fbfcc84-94m2g                    1963m        0Mi
+local-path-storage   local-path-provisioner-7b8c8ddbd6-5wsc9              2m           8Mi
+monitoring           opencost-7db8cfdb4-t8qtr                             9m           55Mi
+monitoring           prometheus-alertmanager-0                            6m           19Mi
+monitoring           prometheus-kube-state-metrics-79d4c77466-42kss       7m           23Mi
+monitoring           prometheus-prometheus-node-exporter-296cp            8m           12Mi
+monitoring           prometheus-prometheus-node-exporter-8nl58            2m           9Mi
+monitoring           prometheus-prometheus-node-exporter-dx7tz            2m           9Mi
+monitoring           prometheus-prometheus-node-exporter-gx8fc            1m           8Mi
+monitoring           prometheus-prometheus-pushgateway-55b4699767-j8mhm   4m           10Mi
+monitoring           prometheus-server-584c849f5-rfdsg                    26m          248Mi
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano nginx-hpa.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f nginx-hpa.yaml
+horizontalpodautoscaler.autoscaling/nginx-hpa created
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get hpa
+NAME        REFERENCE          TARGETS              MINPODS   MAXPODS   REPLICAS   AGE
+nginx-hpa   Deployment/nginx   cpu: <unknown>/60%   2         10        0          23s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl expose deployment nginx \
+--port=80 \
+--target-port=80 \
+--type=NodePort
+Error from server (NotFound): deployments.apps "nginx" not found
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl expose deployment nginx -n frontend --port=80 --target-port=80 --type=NodePort
+service/nginx exposed
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get svc
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   17h
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get svc -n frontend
+NAME    TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+nginx   NodePort   10.96.98.214   <none>        80:31957/TCP   58s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl port-forward svc/nginx 8080:80
+Error from server (NotFound): services "nginx" not found
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl port-forward svc/nginx -n frontend 8080:80
+Forwarding from 127.0.0.1:8080 -> 80
+Forwarding from [::1]:8080 -> 80
+^Cabhijit@ABHIJIT:/mnt/c/finops-lab/apps$

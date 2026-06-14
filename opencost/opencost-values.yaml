@@ -1,0 +1,8 @@
+opencost:
+  exporter:
+    defaultClusterId: finops-lab
+prometheus:
+  external:
+    url: http://prometheus-server.monitoring.svc.cluster.local
+  internal:
+    enabled: false

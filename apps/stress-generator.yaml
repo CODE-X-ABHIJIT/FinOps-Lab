@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: stress-generator
+  namespace: loadtest
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: stress
+
+  template:
+    metadata:
+      labels:
+        app: stress
+
+    spec:
+      containers:
+      - name: stress
+
+        image: polinux/stress
+
+        command:
+        - stress
+
+        args:
+        - "--cpu"
+        - "2"
+
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+
+          limits:
+            cpu: "2"
+            memory: "1Gi"

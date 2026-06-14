@@ -1,0 +1,24 @@
+C:\finops-lab
+│
+├── README.md
+│
+├── cluster
+│   └── kind-config.yaml
+│
+├── apps
+│   ├── nginx-wasteful.yaml
+│   ├── redis-wasteful.yaml
+│   ├── mysql-wasteful.yaml
+│   ├── java-wasteful.yaml
+│   ├── stress-generator.yaml
+│   └── nginx-hpa.yaml
+│
+├── monitoring
+│   ├── prometheus.yaml
+│   └── prometheus-values.yaml
+│
+├── opencost
+│   ├── opencost.yaml
+│   └── opencost-values.yaml
+│
+├── docs

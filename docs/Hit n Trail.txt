@@ -1,0 +1,1237 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\abhij> wsl
+abhijit@ABHIJIT:/mnt/c/Users/abhij$ cd ..
+abhijit@ABHIJIT:/mnt/c/Users$ cd ..
+abhijit@ABHIJIT:/mnt/c$ cd f
+finops-lab/ freshers/
+abhijit@ABHIJIT:/mnt/c$ cd finops-lab/
+abhijit@ABHIJIT:/mnt/c/finops-lab$ ls
+apps  cluster  docs  monitoring  opencost
+abhijit@ABHIJIT:/mnt/c/finops-lab$ cd cluster/
+abhijit@ABHIJIT:/mnt/c/finops-lab/cluster$ ls
+kind-config.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/cluster$ kind create cluster --name finops-lab --config kind-config.yaml
+Creating cluster "finops-lab" ...
+ ✓ Ensuring node image (kindest/node:v1.34.0) 🖼
+ ✓ Preparing nodes 📦 📦 📦 📦
+ ✓ Writing configuration 📜
+ ✓ Starting control-plane 🕹️
+ ✓ Installing CNI 🔌
+ ✓ Installing StorageClass 💾
+ ✓ Joining worker nodes 🚜
+Set kubectl context to "kind-finops-lab"
+You can now use your cluster with:
+
+kubectl cluster-info --context kind-finops-lab
+
+Not sure what to do next? 😅  Check out https://kind.sigs.k8s.io/docs/user/quick-start/
+abhijit@ABHIJIT:/mnt/c/finops-lab/cluster$ kind get clusters
+finops-lab
+abhijit@ABHIJIT:/mnt/c/finops-lab/cluster$ kubectl get nodes
+NAME                       STATUS   ROLES           AGE   VERSION
+finops-lab-control-plane   Ready    control-plane   47s   v1.34.0
+finops-lab-worker          Ready    <none>          27s   v1.34.0
+finops-lab-worker2         Ready    <none>          27s   v1.34.0
+finops-lab-worker3         Ready    <none>          27s   v1.34.0
+abhijit@ABHIJIT:/mnt/c/finops-lab/cluster$ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+serviceaccount/metrics-server created
+clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created
+clusterrole.rbac.authorization.k8s.io/system:metrics-server created
+rolebinding.rbac.authorization.k8s.io/metrics-server-auth-reader created
+clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator created
+clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server created
+service/metrics-server created
+deployment.apps/metrics-server created
+apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created
+abhijit@ABHIJIT:/mnt/c/finops-lab/cluster$ kubectl edit deployment metrics-server -n kube-system
+deployment.apps/metrics-server edited
+abhijit@ABHIJIT:/mnt/c/finops-lab/cluster$ kubectl get pods -n kube-system
+NAME                                               READY   STATUS    RESTARTS   AGE
+coredns-66bc5c9577-f6pjb                           1/1     Running   0          2m7s
+coredns-66bc5c9577-txq5g                           1/1     Running   0          2m7s
+etcd-finops-lab-control-plane                      1/1     Running   0          2m13s
+kindnet-99nnr                                      1/1     Running   0          116s
+kindnet-bfk4h                                      1/1     Running   0          115s
+kindnet-h7ddx                                      1/1     Running   0          2m5s
+kindnet-rsgmd                                      1/1     Running   0          116s
+kube-apiserver-finops-lab-control-plane            1/1     Running   0          2m13s
+kube-controller-manager-finops-lab-control-plane   1/1     Running   0          2m13s
+kube-proxy-4xvrm                                   1/1     Running   0          2m7s
+kube-proxy-c8l7m                                   1/1     Running   0          116s
+kube-proxy-ld4rs                                   1/1     Running   0          115s
+kube-proxy-nnm6d                                   1/1     Running   0          116s
+kube-scheduler-finops-lab-control-plane            1/1     Running   0          2m13s
+metrics-server-5b57c547cb-x88n2                    0/1     Running   0          13s
+metrics-server-7cfb66fcc-5tsdv                     0/1     Running   0          74s
+abhijit@ABHIJIT:/mnt/c/finops-lab/cluster$ kubectl get pods -n kube-system -w
+NAME                                               READY   STATUS    RESTARTS   AGE
+coredns-66bc5c9577-f6pjb                           1/1     Running   0          2m13s
+coredns-66bc5c9577-txq5g                           1/1     Running   0          2m13s
+etcd-finops-lab-control-plane                      1/1     Running   0          2m19s
+kindnet-99nnr                                      1/1     Running   0          2m2s
+kindnet-bfk4h                                      1/1     Running   0          2m1s
+kindnet-h7ddx                                      1/1     Running   0          2m11s
+kindnet-rsgmd                                      1/1     Running   0          2m2s
+kube-apiserver-finops-lab-control-plane            1/1     Running   0          2m19s
+kube-controller-manager-finops-lab-control-plane   1/1     Running   0          2m19s
+kube-proxy-4xvrm                                   1/1     Running   0          2m13s
+kube-proxy-c8l7m                                   1/1     Running   0          2m2s
+kube-proxy-ld4rs                                   1/1     Running   0          2m1s
+kube-proxy-nnm6d                                   1/1     Running   0          2m2s
+kube-scheduler-finops-lab-control-plane            1/1     Running   0          2m19s
+metrics-server-5b57c547cb-x88n2                    0/1     Running   0          19s
+metrics-server-7cfb66fcc-5tsdv                     0/1     Running   0          80s
+metrics-server-5b57c547cb-x88n2                    1/1     Running   0          28s
+metrics-server-7cfb66fcc-5tsdv                     0/1     Terminating   0          89s
+metrics-server-7cfb66fcc-5tsdv                     0/1     Terminating   0          89s
+metrics-server-7cfb66fcc-5tsdv                     0/1     Completed     0          89s
+metrics-server-7cfb66fcc-5tsdv                     0/1     Completed     0          90s
+metrics-server-7cfb66fcc-5tsdv                     0/1     Completed     0          90s
+^Cabhijit@ABHIJIT:/mnt/c/finops-lab/cluster$ kubectl get pods -n kube-system
+NAME                                               READY   STATUS    RESTARTS   AGE
+coredns-66bc5c9577-f6pjb                           1/1     Running   0          2m36s
+coredns-66bc5c9577-txq5g                           1/1     Running   0          2m36s
+etcd-finops-lab-control-plane                      1/1     Running   0          2m42s
+kindnet-99nnr                                      1/1     Running   0          2m25s
+kindnet-bfk4h                                      1/1     Running   0          2m24s
+kindnet-h7ddx                                      1/1     Running   0          2m34s
+kindnet-rsgmd                                      1/1     Running   0          2m25s
+kube-apiserver-finops-lab-control-plane            1/1     Running   0          2m42s
+kube-controller-manager-finops-lab-control-plane   1/1     Running   0          2m42s
+kube-proxy-4xvrm                                   1/1     Running   0          2m36s
+kube-proxy-c8l7m                                   1/1     Running   0          2m25s
+kube-proxy-ld4rs                                   1/1     Running   0          2m24s
+kube-proxy-nnm6d                                   1/1     Running   0          2m25s
+kube-scheduler-finops-lab-control-plane            1/1     Running   0          2m42s
+metrics-server-5b57c547cb-x88n2                    1/1     Running   0          42s
+abhijit@ABHIJIT:/mnt/c/finops-lab/cluster$ kubectl top nodes
+NAME                       CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)
+finops-lab-control-plane   111m         1%       705Mi           18%
+finops-lab-worker          16m          0%       138Mi           3%
+finops-lab-worker2         27m          0%       187Mi           4%
+finops-lab-worker3         45m          0%       166Mi           4%
+abhijit@ABHIJIT:/mnt/c/finops-lab/cluster$ kubectl top nodes
+NAME                       CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)
+finops-lab-control-plane   97m          1%       707Mi           18%
+finops-lab-worker          14m          0%       139Mi           3%
+finops-lab-worker2         17m          0%       188Mi           5%
+finops-lab-worker3         14m          0%       168Mi           4%
+abhijit@ABHIJIT:/mnt/c/finops-lab/cluster$ cd ..
+abhijit@ABHIJIT:/mnt/c/finops-lab$ cd apps/
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f nginx.yaml
+deployment.apps/nginx created
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                     READY   STATUS              RESTARTS   AGE
+nginx-7ccccd94f7-dtpw8   0/1     ContainerCreating   0          9s
+nginx-7ccccd94f7-scnf4   0/1     ContainerCreating   0          9s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                     READY   STATUS              RESTARTS   AGE
+nginx-7ccccd94f7-dtpw8   0/1     ContainerCreating   0          11s
+nginx-7ccccd94f7-scnf4   0/1     ContainerCreating   0          11s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods -w
+NAME                     READY   STATUS              RESTARTS   AGE
+nginx-7ccccd94f7-dtpw8   0/1     ContainerCreating   0          15s
+nginx-7ccccd94f7-scnf4   0/1     ContainerCreating   0          15s
+nginx-7ccccd94f7-dtpw8   1/1     Running             0          24s
+nginx-7ccccd94f7-scnf4   1/1     Running             0          25s
+^Cabhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE   IP           NODE                 NOMINATED NODE   READINESS GATES
+nginx-7ccccd94f7-dtpw8   1/1     Running   0          28s   10.244.1.3   finops-lab-worker3   <none>           <none>
+nginx-7ccccd94f7-scnf4   1/1     Running   0          28s   10.244.3.2   finops-lab-worker    <none>           <none>
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get nodes
+NAME                       STATUS   ROLES           AGE     VERSION
+finops-lab-control-plane   Ready    control-plane   4m13s   v1.34.0
+finops-lab-worker          Ready    <none>          3m53s   v1.34.0
+finops-lab-worker2         Ready    <none>          3m53s   v1.34.0
+finops-lab-worker3         Ready    <none>          3m53s   v1.34.0
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl top nodes
+NAME                       CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)
+finops-lab-control-plane   163m         2%       679Mi           18%
+finops-lab-worker          412m         5%       175Mi           4%
+finops-lab-worker2         29m          0%       194Mi           5%
+finops-lab-worker3         212m         2%       189Mi           5%
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE   IP           NODE                 NOMINATED NODE   READINESS GATES
+nginx-7ccccd94f7-dtpw8   1/1     Running   0          64s   10.244.1.3   finops-lab-worker3   <none>           <none>
+nginx-7ccccd94f7-scnf4   1/1     Running   0          64s   10.244.3.2   finops-lab-worker    <none>           <none>
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl delete deployment nginx
+deployment.apps "nginx" deleted from default namespace
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+No resources found in default namespace.
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl create deplyment nginx-wasteful.yaml
+error: Unexpected args: [deplyment nginx-wasteful.yaml]
+See 'kubectl create -h' for help and examples
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nginx-wasteful.yaml
+nginx-wasteful.yaml: command not found
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano nginx-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano nginx-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f nginx-wasteful.yaml
+deployment.apps/nginx created
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                     READY   STATUS              RESTARTS   AGE
+nginx-5c56cd7b55-jhnnc   1/1     Running             0          10s
+nginx-5c56cd7b55-jlf76   0/1     ContainerCreating   0          10s
+nginx-5c56cd7b55-slqfl   1/1     Running             0          10s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                     READY   STATUS              RESTARTS   AGE
+nginx-5c56cd7b55-jhnnc   1/1     Running             0          13s
+nginx-5c56cd7b55-jlf76   0/1     ContainerCreating   0          13s
+nginx-5c56cd7b55-slqfl   1/1     Running             0          13s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods -w
+NAME                     READY   STATUS    RESTARTS   AGE
+nginx-5c56cd7b55-jhnnc   1/1     Running   0          19s
+nginx-5c56cd7b55-jlf76   1/1     Running   0          19s
+nginx-5c56cd7b55-slqfl   1/1     Running   0          19s
+^Cabhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano redis-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f redis-wasteful.yaml
+deployment.apps/redis created
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                     READY   STATUS              RESTARTS   AGE
+nginx-5c56cd7b55-jhnnc   1/1     Running             0          62s
+nginx-5c56cd7b55-jlf76   1/1     Running             0          62s
+nginx-5c56cd7b55-slqfl   1/1     Running             0          62s
+redis-7d454cb484-cm6nq   0/1     ContainerCreating   0          5s
+redis-7d454cb484-jwc5d   0/1     ContainerCreating   0          5s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods -w
+NAME                     READY   STATUS              RESTARTS   AGE
+nginx-5c56cd7b55-jhnnc   1/1     Running             0          67s
+nginx-5c56cd7b55-jlf76   1/1     Running             0          67s
+nginx-5c56cd7b55-slqfl   1/1     Running             0          67s
+redis-7d454cb484-cm6nq   0/1     ContainerCreating   0          10s
+redis-7d454cb484-jwc5d   0/1     ContainerCreating   0          10s
+redis-7d454cb484-jwc5d   1/1     Running             0          11s
+redis-7d454cb484-cm6nq   1/1     Running             0          14s
+^Cabhijit@ABHIJIT:/mnt/c/finops-lab/apps$ mysql-wasteful.yaml
+mysql-wasteful.yaml: command not found
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano mysql-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f mysql-wasteful.yaml
+deployment.apps/mysql created
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                     READY   STATUS    RESTARTS   AGE
+mysql-9d7c78c88-54mk5    0/1     Pending   0          6s
+nginx-5c56cd7b55-jhnnc   1/1     Running   0          113s
+nginx-5c56cd7b55-jlf76   1/1     Running   0          113s
+nginx-5c56cd7b55-slqfl   1/1     Running   0          113s
+redis-7d454cb484-cm6nq   1/1     Running   0          56s
+redis-7d454cb484-jwc5d   1/1     Running   0          56s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano java-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f java-wasteful.yaml
+deployment.apps/java-app created
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+java-app-7f5f9c7c-d4qw9   0/1     Pending   0          6s
+java-app-7f5f9c7c-ksnqx   0/1     Pending   0          6s
+mysql-9d7c78c88-54mk5     0/1     Pending   0          38s
+nginx-5c56cd7b55-jhnnc    1/1     Running   0          2m25s
+nginx-5c56cd7b55-jlf76    1/1     Running   0          2m25s
+nginx-5c56cd7b55-slqfl    1/1     Running   0          2m25s
+redis-7d454cb484-cm6nq    1/1     Running   0          88s
+redis-7d454cb484-jwc5d    1/1     Running   0          88s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+java-app-7f5f9c7c-d4qw9   0/1     Pending   0          12s
+java-app-7f5f9c7c-ksnqx   0/1     Pending   0          12s
+mysql-9d7c78c88-54mk5     0/1     Pending   0          44s
+nginx-5c56cd7b55-jhnnc    1/1     Running   0          2m31s
+nginx-5c56cd7b55-jlf76    1/1     Running   0          2m31s
+nginx-5c56cd7b55-slqfl    1/1     Running   0          2m31s
+redis-7d454cb484-cm6nq    1/1     Running   0          94s
+redis-7d454cb484-jwc5d    1/1     Running   0          94s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+java-app-7f5f9c7c-d4qw9   0/1     Pending   0          17s
+java-app-7f5f9c7c-ksnqx   0/1     Pending   0          17s
+mysql-9d7c78c88-54mk5     0/1     Pending   0          49s
+nginx-5c56cd7b55-jhnnc    1/1     Running   0          2m36s
+nginx-5c56cd7b55-jlf76    1/1     Running   0          2m36s
+nginx-5c56cd7b55-slqfl    1/1     Running   0          2m36s
+redis-7d454cb484-cm6nq    1/1     Running   0          99s
+redis-7d454cb484-jwc5d    1/1     Running   0          99s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods -w
+NAME                      READY   STATUS    RESTARTS   AGE
+java-app-7f5f9c7c-d4qw9   0/1     Pending   0          22s
+java-app-7f5f9c7c-ksnqx   0/1     Pending   0          22s
+mysql-9d7c78c88-54mk5     0/1     Pending   0          54s
+nginx-5c56cd7b55-jhnnc    1/1     Running   0          2m41s
+nginx-5c56cd7b55-jlf76    1/1     Running   0          2m41s
+nginx-5c56cd7b55-slqfl    1/1     Running   0          2m41s
+redis-7d454cb484-cm6nq    1/1     Running   0          104s
+redis-7d454cb484-jwc5d    1/1     Running   0          104s
+^Cabhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl describe pod mysql-9d7c78c88-54mk5
+Name:             mysql-9d7c78c88-54mk5
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             <none>
+Labels:           app=mysql
+                  pod-template-hash=9d7c78c88
+Annotations:      <none>
+Status:           Pending
+IP:
+IPs:              <none>
+Controlled By:    ReplicaSet/mysql-9d7c78c88
+Containers:
+  mysql:
+    Image:      mysql:8.0
+    Port:       <none>
+    Host Port:  <none>
+    Limits:
+      cpu:     4
+      memory:  4Gi
+    Requests:
+      cpu:     2
+      memory:  3Gi
+    Environment:
+      MYSQL_ROOT_PASSWORD:  root123
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-6nvhm (ro)
+Conditions:
+  Type           Status
+  PodScheduled   False
+Volumes:
+  kube-api-access-6nvhm:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age   From               Message
+  ----     ------            ----  ----               -------
+  Warning  FailedScheduling  82s   default-scheduler  0/4 nodes are available: 1 node(s) had untolerated taint {node-role.kubernetes.io/control-plane: }, 3 Insufficient memory. no new claims to deallocate, preemption: 0/4 nodes are available: 1 Preemption is not helpful for scheduling, 3 No preemption victims found for incoming pod.
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+java-app-7f5f9c7c-d4qw9   0/1     Pending   0          101s
+java-app-7f5f9c7c-ksnqx   0/1     Pending   0          101s
+mysql-9d7c78c88-54mk5     0/1     Pending   0          2m13s
+nginx-5c56cd7b55-jhnnc    1/1     Running   0          4m
+nginx-5c56cd7b55-jlf76    1/1     Running   0          4m
+nginx-5c56cd7b55-slqfl    1/1     Running   0          4m
+redis-7d454cb484-cm6nq    1/1     Running   0          3m3s
+redis-7d454cb484-jwc5d    1/1     Running   0          3m3s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano nginx-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano nginx-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get node
+NAME                       STATUS   ROLES           AGE   VERSION
+finops-lab-control-plane   Ready    control-plane   20m   v1.34.0
+finops-lab-worker          Ready    <none>          20m   v1.34.0
+finops-lab-worker2         Ready    <none>          20m   v1.34.0
+finops-lab-worker3         Ready    <none>          20m   v1.34.0
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl describe node finops-lab-worker
+Name:               finops-lab-worker
+Roles:              <none>
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/os=linux
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=finops-lab-worker
+                    kubernetes.io/os=linux
+Annotations:        node.alpha.kubernetes.io/ttl: 0
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Sat, 13 Jun 2026 18:32:10 +0000
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  finops-lab-worker
+  AcquireTime:     <unset>
+  RenewTime:       Sat, 13 Jun 2026 18:52:50 +0000
+Conditions:
+  Type             Status  LastHeartbeatTime                 LastTransitionTime                Reason                       Message
+  ----             ------  -----------------                 ------------------                ------                       -------
+  MemoryPressure   False   Sat, 13 Jun 2026 18:52:00 +0000   Sat, 13 Jun 2026 18:32:10 +0000   KubeletHasSufficientMemory   kubelet has sufficient memory available
+  DiskPressure     False   Sat, 13 Jun 2026 18:52:00 +0000   Sat, 13 Jun 2026 18:32:10 +0000   KubeletHasNoDiskPressure     kubelet has no disk pressure
+  PIDPressure      False   Sat, 13 Jun 2026 18:52:00 +0000   Sat, 13 Jun 2026 18:32:10 +0000   KubeletHasSufficientPID      kubelet has sufficient PID available
+  Ready            True    Sat, 13 Jun 2026 18:52:00 +0000   Sat, 13 Jun 2026 18:32:31 +0000   KubeletReady                 kubelet is posting ready status
+Addresses:
+  InternalIP:  172.18.0.3
+  Hostname:    finops-lab-worker
+Capacity:
+  cpu:                8
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             3842264Ki
+  pods:               110
+Allocatable:
+  cpu:                8
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             3842264Ki
+  pods:               110
+System Info:
+  Machine ID:                 2271fab271674c678510dff670694273
+  System UUID:                2271fab271674c678510dff670694273
+  Boot ID:                    6715fffb-4fec-405c-aae2-f94a26b7160e
+  Kernel Version:             6.6.87.2-microsoft-standard-WSL2
+  OS Image:                   Debian GNU/Linux 12 (bookworm)
+  Operating System:           linux
+  Architecture:               amd64
+  Container Runtime Version:  containerd://2.1.3
+  Kubelet Version:            v1.34.0
+PodCIDR:                      10.244.3.0/24
+PodCIDRs:                     10.244.3.0/24
+ProviderID:                   kind://docker/finops-lab/finops-lab-worker
+Non-terminated Pods:          (4 in total)
+  Namespace                   Name                      CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                   ----                      ------------  ----------  ---------------  -------------  ---
+  default                     nginx-5c56cd7b55-jhnnc    2 (25%)       4 (50%)     2Gi (54%)        4Gi (109%)     12m
+  default                     redis-7d454cb484-jwc5d    1 (12%)       2 (25%)     1Gi (27%)        2Gi (54%)      11m
+  kube-system                 kindnet-bfk4h             100m (1%)     100m (1%)   50Mi (1%)        50Mi (1%)      20m
+  kube-system                 kube-proxy-ld4rs          0 (0%)        0 (0%)      0 (0%)           0 (0%)         20m
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests      Limits
+  --------           --------      ------
+  cpu                3100m (38%)   6100m (76%)
+  memory             3122Mi (83%)  6194Mi (165%)
+  ephemeral-storage  0 (0%)        0 (0%)
+  hugepages-1Gi      0 (0%)        0 (0%)
+  hugepages-2Mi      0 (0%)        0 (0%)
+Events:
+  Type    Reason                   Age                From             Message
+  ----    ------                   ----               ----             -------
+  Normal  Starting                 20m                kube-proxy
+  Normal  NodeHasSufficientMemory  20m (x3 over 20m)  kubelet          Node finops-lab-worker status is now: NodeHasSufficientMemory
+  Normal  NodeHasNoDiskPressure    20m (x3 over 20m)  kubelet          Node finops-lab-worker status is now: NodeHasNoDiskPressure
+  Normal  NodeHasSufficientPID     20m (x3 over 20m)  kubelet          Node finops-lab-worker status is now: NodeHasSufficientPID
+  Normal  NodeAllocatableEnforced  20m                kubelet          Updated Node Allocatable limit across pods
+  Normal  RegisteredNode           20m                node-controller  Node finops-lab-worker event: Registered Node finops-lab-worker in Controller
+  Normal  NodeReady                20m                kubelet          Node finops-lab-worker status is now: NodeReady
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano nginx-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+java-app-7f5f9c7c-d4qw9   0/1     Pending   0          11m
+java-app-7f5f9c7c-ksnqx   0/1     Pending   0          11m
+mysql-9d7c78c88-54mk5     0/1     Pending   0          11m
+nginx-5c56cd7b55-jhnnc    1/1     Running   0          13m
+nginx-5c56cd7b55-jlf76    1/1     Running   0          13m
+nginx-5c56cd7b55-slqfl    1/1     Running   0          13m
+redis-7d454cb484-cm6nq    1/1     Running   0          12m
+redis-7d454cb484-jwc5d    1/1     Running   0          12m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano mysql-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+java-app-7f5f9c7c-d4qw9   0/1     Pending   0          11m
+java-app-7f5f9c7c-ksnqx   0/1     Pending   0          11m
+mysql-9d7c78c88-54mk5     0/1     Pending   0          12m
+nginx-5c56cd7b55-jhnnc    1/1     Running   0          14m
+nginx-5c56cd7b55-jlf76    1/1     Running   0          14m
+nginx-5c56cd7b55-slqfl    1/1     Running   0          14m
+redis-7d454cb484-cm6nq    1/1     Running   0          13m
+redis-7d454cb484-jwc5d    1/1     Running   0          13m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano java-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano redis-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+java-app-7f5f9c7c-d4qw9   0/1     Pending   0          12m
+java-app-7f5f9c7c-ksnqx   0/1     Pending   0          12m
+mysql-9d7c78c88-54mk5     0/1     Pending   0          13m
+nginx-5c56cd7b55-jhnnc    1/1     Running   0          14m
+nginx-5c56cd7b55-jlf76    1/1     Running   0          14m
+nginx-5c56cd7b55-slqfl    1/1     Running   0          14m
+redis-7d454cb484-cm6nq    1/1     Running   0          14m
+redis-7d454cb484-jwc5d    1/1     Running   0          14m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl delete pods mysql-9d7c78c88-54mk5 java-app-7f5f9c7c-ksnqx java-app-7f5f9c7c-d4qw9
+pod "mysql-9d7c78c88-54mk5" deleted from default namespace
+pod "java-app-7f5f9c7c-ksnqx" deleted from default namespace
+pod "java-app-7f5f9c7c-d4qw9" deleted from default namespace
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+java-app-7f5f9c7c-2hc9g   0/1     Pending   0          3s
+java-app-7f5f9c7c-xjhql   0/1     Pending   0          3s
+mysql-9d7c78c88-vpggp     0/1     Pending   0          3s
+nginx-5c56cd7b55-jhnnc    1/1     Running   0          15m
+nginx-5c56cd7b55-jlf76    1/1     Running   0          15m
+nginx-5c56cd7b55-slqfl    1/1     Running   0          15m
+redis-7d454cb484-cm6nq    1/1     Running   0          14m
+redis-7d454cb484-jwc5d    1/1     Running   0          14m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f java-wasteful.yaml
+deployment.apps/java-app configured
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f mysql-wasteful.yaml
+deployment.apps/mysql configured
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f redis-wasteful.yaml
+deployment.apps/redis unchanged
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f nginx-wasteful.yaml
+deployment.apps/nginx configured
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+java-app-7b46d8b69d-qkrfx   1/1     Running   0          53s
+java-app-7b46d8b69d-xq6jf   0/1     Pending   0          39s
+java-app-7f5f9c7c-2hc9g     0/1     Pending   0          71s
+mysql-9d7c78c88-vpggp       0/1     Pending   0          71s
+mysql-f4bcdcc66-mgvts       0/1     Pending   0          39s
+nginx-5c56cd7b55-jhnnc      1/1     Running   0          16m
+nginx-5c56cd7b55-jlf76      1/1     Running   0          16m
+nginx-5c56cd7b55-slqfl      1/1     Running   0          16m
+nginx-69cddb8756-wclh9      0/1     Pending   0          4s
+redis-7d454cb484-cm6nq      1/1     Running   0          15m
+redis-7d454cb484-jwc5d      1/1     Running   0          15m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+java-app-7b46d8b69d-qkrfx   1/1     Running   0          65s
+java-app-7b46d8b69d-xq6jf   0/1     Pending   0          51s
+java-app-7f5f9c7c-2hc9g     0/1     Pending   0          83s
+mysql-9d7c78c88-vpggp       0/1     Pending   0          83s
+mysql-f4bcdcc66-mgvts       0/1     Pending   0          51s
+nginx-5c56cd7b55-jhnnc      1/1     Running   0          16m
+nginx-5c56cd7b55-jlf76      1/1     Running   0          16m
+nginx-5c56cd7b55-slqfl      1/1     Running   0          16m
+nginx-69cddb8756-wclh9      0/1     Pending   0          16s
+redis-7d454cb484-cm6nq      1/1     Running   0          15m
+redis-7d454cb484-jwc5d      1/1     Running   0          15m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+java-app-7b46d8b69d-qkrfx   1/1     Running   0          78s
+java-app-7b46d8b69d-xq6jf   0/1     Pending   0          64s
+java-app-7f5f9c7c-2hc9g     0/1     Pending   0          96s
+mysql-9d7c78c88-vpggp       0/1     Pending   0          96s
+mysql-f4bcdcc66-mgvts       0/1     Pending   0          64s
+nginx-5c56cd7b55-jhnnc      1/1     Running   0          17m
+nginx-5c56cd7b55-jlf76      1/1     Running   0          17m
+nginx-5c56cd7b55-slqfl      1/1     Running   0          17m
+nginx-69cddb8756-wclh9      0/1     Pending   0          29s
+redis-7d454cb484-cm6nq      1/1     Running   0          16m
+redis-7d454cb484-jwc5d      1/1     Running   0          16m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl rollout restart deployment java-wasteful.yaml
+Error from server (NotFound): deployments.apps "java-wasteful.yaml" not found
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl rollout restart deployment java-wasteful
+Error from server (NotFound): deployments.apps "java-wasteful" not found
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get deploy
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+java-app   1/2     2            1           16m
+mysql      0/1     1            0           16m
+nginx      3/3     1            3           18m
+redis      2/2     2            2           17m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl rollout restart deployment java-app
+deployment.apps/java-app restarted
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl rollout restart deployment mysql
+deployment.apps/mysql restarted
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl rollout restart deployment nginx
+deployment.apps/nginx restarted
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl rollout restart deployment redis
+deployment.apps/redis restarted
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+java-app-7779cf6fdc-zz96t   0/1     Pending   0          36s
+java-app-7b46d8b69d-qkrfx   1/1     Running   0          3m28s
+java-app-7b46d8b69d-xq6jf   0/1     Pending   0          3m14s
+mysql-776b96cd78-ssljt      0/1     Pending   0          28s
+mysql-f4bcdcc66-mgvts       0/1     Pending   0          3m14s
+nginx-5c48d849f4-l25xc      0/1     Pending   0          17s
+nginx-5c56cd7b55-jhnnc      1/1     Running   0          19m
+nginx-5c56cd7b55-jlf76      1/1     Running   0          19m
+nginx-5c56cd7b55-slqfl      1/1     Running   0          19m
+redis-7b67c6c569-2snzz      0/1     Pending   0          11s
+redis-7d454cb484-cm6nq      1/1     Running   0          18m
+redis-7d454cb484-jwc5d      1/1     Running   0          18m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl delete pod nginx-5c48d849f4-l25xc mysql-f4bcdcc66-mgvts java-app-7b46d8b69d-xq6jf java-app-7b46d8b69d-qkrfxjava-app-7779cf6fdc-zz96t --grace-period=0 --force
+Warning: Immediate deletion does not wait for confirmation that the running resource has been terminated. The resource may continue to run on the cluster indefinitely.
+pod "nginx-5c48d849f4-l25xc" force deleted from default namespace
+pod "mysql-f4bcdcc66-mgvts" force deleted from default namespace
+pod "java-app-7b46d8b69d-xq6jf" force deleted from default namespace
+Error from server (NotFound): pods "java-app-7b46d8b69d-qkrfxjava-app-7779cf6fdc-zz96t" not found
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+java-app-7779cf6fdc-zz96t   0/1     Pending   0          2m34s
+java-app-7b46d8b69d-7xlf2   0/1     Pending   0          15s
+java-app-7b46d8b69d-qkrfx   1/1     Running   0          5m26s
+mysql-776b96cd78-ssljt      0/1     Pending   0          2m26s
+mysql-f4bcdcc66-d2sz5       0/1     Pending   0          15s
+nginx-5c48d849f4-z2shz      0/1     Pending   0          15s
+nginx-5c56cd7b55-jhnnc      1/1     Running   0          21m
+nginx-5c56cd7b55-jlf76      1/1     Running   0          21m
+nginx-5c56cd7b55-slqfl      1/1     Running   0          21m
+redis-7b67c6c569-2snzz      0/1     Pending   0          2m9s
+redis-7d454cb484-cm6nq      1/1     Running   0          20m
+redis-7d454cb484-jwc5d      1/1     Running   0          20m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl delete pod java-app-7779cf6fdc-zz96t --grace-period=0 --force
+Warning: Immediate deletion does not wait for confirmation that the running resource has been terminated. The resource may continue to run on the cluster indefinitely.
+pod "java-app-7779cf6fdc-zz96t" force deleted from default namespace
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+java-app-7779cf6fdc-sjtk5   0/1     Pending   0          5s
+java-app-7b46d8b69d-7xlf2   0/1     Pending   0          50s
+java-app-7b46d8b69d-qkrfx   1/1     Running   0          6m1s
+mysql-776b96cd78-ssljt      0/1     Pending   0          3m1s
+mysql-f4bcdcc66-d2sz5       0/1     Pending   0          50s
+nginx-5c48d849f4-z2shz      0/1     Pending   0          50s
+nginx-5c56cd7b55-jhnnc      1/1     Running   0          21m
+nginx-5c56cd7b55-jlf76      1/1     Running   0          21m
+nginx-5c56cd7b55-slqfl      1/1     Running   0          21m
+redis-7b67c6c569-2snzz      0/1     Pending   0          2m44s
+redis-7d454cb484-cm6nq      1/1     Running   0          20m
+redis-7d454cb484-jwc5d      1/1     Running   0          20m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+java-app-7779cf6fdc-sjtk5   0/1     Pending   0          19s
+java-app-7b46d8b69d-7xlf2   0/1     Pending   0          64s
+java-app-7b46d8b69d-qkrfx   1/1     Running   0          6m15s
+mysql-776b96cd78-ssljt      0/1     Pending   0          3m15s
+mysql-f4bcdcc66-d2sz5       0/1     Pending   0          64s
+nginx-5c48d849f4-z2shz      0/1     Pending   0          64s
+nginx-5c56cd7b55-jhnnc      1/1     Running   0          22m
+nginx-5c56cd7b55-jlf76      1/1     Running   0          22m
+nginx-5c56cd7b55-slqfl      1/1     Running   0          22m
+redis-7b67c6c569-2snzz      0/1     Pending   0          2m58s
+redis-7d454cb484-cm6nq      1/1     Running   0          21m
+redis-7d454cb484-jwc5d      1/1     Running   0          21m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano java-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano redis-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano mysql-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano nginx-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f java-wasteful.yaml
+deployment.apps/java-app unchanged
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f nginx-wasteful.yaml
+deployment.apps/nginx unchanged
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f redis-wasteful.yaml
+deployment.apps/redis unchanged
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f mysql-wasteful.yaml
+deployment.apps/mysql configured
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl delete pods -A
+error: resource(s) were provided, but no name was specified
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+java-app-7779cf6fdc-sjtk5   0/1     Pending   0          3m8s
+java-app-7b46d8b69d-7xlf2   0/1     Pending   0          3m53s
+java-app-7b46d8b69d-qkrfx   1/1     Running   0          9m4s
+mysql-776b96cd78-ssljt      0/1     Pending   0          6m4s
+mysql-7bc79fff45-94z5n      0/1     Pending   0          34s
+nginx-5c48d849f4-z2shz      0/1     Pending   0          3m53s
+nginx-5c56cd7b55-jhnnc      1/1     Running   0          24m
+nginx-5c56cd7b55-jlf76      1/1     Running   0          24m
+nginx-5c56cd7b55-slqfl      1/1     Running   0          24m
+redis-7b67c6c569-2snzz      0/1     Pending   0          5m47s
+redis-7d454cb484-cm6nq      1/1     Running   0          23m
+redis-7d454cb484-jwc5d      1/1     Running   0          23m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl delete pods java-app-7779cf6fdc-sjtk5
+pod "java-app-7779cf6fdc-sjtk5" deleted from default namespace
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+java-app-7779cf6fdc-9xktl   0/1     Pending   0          2s
+java-app-7b46d8b69d-7xlf2   0/1     Pending   0          4m14s
+java-app-7b46d8b69d-qkrfx   1/1     Running   0          9m25s
+mysql-776b96cd78-ssljt      0/1     Pending   0          6m25s
+mysql-7bc79fff45-94z5n      0/1     Pending   0          55s
+nginx-5c48d849f4-z2shz      0/1     Pending   0          4m14s
+nginx-5c56cd7b55-jhnnc      1/1     Running   0          25m
+nginx-5c56cd7b55-jlf76      1/1     Running   0          25m
+nginx-5c56cd7b55-slqfl      1/1     Running   0          25m
+redis-7b67c6c569-2snzz      0/1     Pending   0          6m8s
+redis-7d454cb484-cm6nq      1/1     Running   0          24m
+redis-7d454cb484-jwc5d      1/1     Running   0          24m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get deploy
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+java-app   1/2     1            1           23m
+mysql      0/1     1            0           23m
+nginx      3/3     1            3           25m
+redis      2/2     1            2           24m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano java-app
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano java-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl scale deployment java-app replicas=1
+error: required flag(s) "replicas" not set
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl scale deployment java-app --replicas=1
+deployment.apps/java-app scaled
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+java-app-7779cf6fdc-9xktl   0/1     Pending   0          2m3s
+java-app-7b46d8b69d-qkrfx   1/1     Running   0          11m
+mysql-776b96cd78-ssljt      0/1     Pending   0          8m26s
+mysql-7bc79fff45-94z5n      0/1     Pending   0          2m56s
+nginx-5c48d849f4-z2shz      0/1     Pending   0          6m15s
+nginx-5c56cd7b55-jhnnc      1/1     Running   0          27m
+nginx-5c56cd7b55-jlf76      1/1     Running   0          27m
+nginx-5c56cd7b55-slqfl      1/1     Running   0          27m
+redis-7b67c6c569-2snzz      0/1     Pending   0          8m9s
+redis-7d454cb484-cm6nq      1/1     Running   0          26m
+redis-7d454cb484-jwc5d      1/1     Running   0          26m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl delete pods java-app-7779cf6fdc-9xktl java-app-7b46d8b69d-qkrfx
+pod "java-app-7779cf6fdc-9xktl" deleted from default namespace
+pod "java-app-7b46d8b69d-qkrfx" deleted from default namespace
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+java-app-7779cf6fdc-fb8b6   0/1     Pending             0          4s
+java-app-7b46d8b69d-vpgr5   0/1     Pending             0          4s
+mysql-776b96cd78-ssljt      0/1     Pending             0          8m58s
+mysql-7bc79fff45-94z5n      0/1     ContainerCreating   0          3m28s
+nginx-5c48d849f4-z2shz      0/1     Pending             0          6m47s
+nginx-5c56cd7b55-jhnnc      1/1     Running             0          27m
+nginx-5c56cd7b55-jlf76      1/1     Running             0          27m
+nginx-5c56cd7b55-slqfl      1/1     Running             0          27m
+redis-7b67c6c569-2snzz      0/1     Pending             0          8m41s
+redis-7d454cb484-cm6nq      1/1     Running             0          26m
+redis-7d454cb484-jwc5d      1/1     Running             0          26m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+java-app-7779cf6fdc-fb8b6   0/1     Pending             0          6s
+java-app-7b46d8b69d-vpgr5   0/1     Pending             0          6s
+mysql-776b96cd78-ssljt      0/1     Pending             0          9m
+mysql-7bc79fff45-94z5n      0/1     ContainerCreating   0          3m30s
+nginx-5c48d849f4-z2shz      0/1     Pending             0          6m49s
+nginx-5c56cd7b55-jhnnc      1/1     Running             0          27m
+nginx-5c56cd7b55-jlf76      1/1     Running             0          27m
+nginx-5c56cd7b55-slqfl      1/1     Running             0          27m
+redis-7b67c6c569-2snzz      0/1     Pending             0          8m43s
+redis-7d454cb484-cm6nq      1/1     Running             0          26m
+redis-7d454cb484-jwc5d      1/1     Running             0          26m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+java-app-7779cf6fdc-fb8b6   0/1     Pending             0          8s
+java-app-7b46d8b69d-vpgr5   0/1     Pending             0          8s
+mysql-776b96cd78-ssljt      0/1     Pending             0          9m2s
+mysql-7bc79fff45-94z5n      0/1     ContainerCreating   0          3m32s
+nginx-5c48d849f4-z2shz      0/1     Pending             0          6m51s
+nginx-5c56cd7b55-jhnnc      1/1     Running             0          27m
+nginx-5c56cd7b55-jlf76      1/1     Running             0          27m
+nginx-5c56cd7b55-slqfl      1/1     Running             0          27m
+redis-7b67c6c569-2snzz      0/1     Pending             0          8m45s
+redis-7d454cb484-cm6nq      1/1     Running             0          26m
+redis-7d454cb484-jwc5d      1/1     Running             0          26m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+java-app-7779cf6fdc-fb8b6   0/1     Pending             0          11s
+java-app-7b46d8b69d-vpgr5   0/1     Pending             0          11s
+mysql-776b96cd78-ssljt      0/1     Pending             0          9m5s
+mysql-7bc79fff45-94z5n      0/1     ContainerCreating   0          3m35s
+nginx-5c48d849f4-z2shz      0/1     Pending             0          6m54s
+nginx-5c56cd7b55-jhnnc      1/1     Running             0          27m
+nginx-5c56cd7b55-jlf76      1/1     Running             0          27m
+nginx-5c56cd7b55-slqfl      1/1     Running             0          27m
+redis-7b67c6c569-2snzz      0/1     Pending             0          8m48s
+redis-7d454cb484-cm6nq      1/1     Running             0          26m
+redis-7d454cb484-jwc5d      1/1     Running             0          26m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+java-app-7779cf6fdc-fb8b6   0/1     Pending             0          13s
+java-app-7b46d8b69d-vpgr5   0/1     Pending             0          13s
+mysql-776b96cd78-ssljt      0/1     Pending             0          9m7s
+mysql-7bc79fff45-94z5n      0/1     ContainerCreating   0          3m37s
+nginx-5c48d849f4-z2shz      0/1     Pending             0          6m56s
+nginx-5c56cd7b55-jhnnc      1/1     Running             0          27m
+nginx-5c56cd7b55-jlf76      1/1     Running             0          27m
+nginx-5c56cd7b55-slqfl      1/1     Running             0          27m
+redis-7b67c6c569-2snzz      0/1     Pending             0          8m50s
+redis-7d454cb484-cm6nq      1/1     Running             0          26m
+redis-7d454cb484-jwc5d      1/1     Running             0          26m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl scale deployments -A --replicas=0
+error: unknown shorthand flag: 'A' in -A
+See 'kubectl scale --help' for usage.
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl scale deployments --replicas=0
+error: resource(s) were provided, but no name was specified
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl scale deployments --all --replicas=0
+deployment.apps/java-app scaled
+deployment.apps/mysql scaled
+deployment.apps/nginx scaled
+deployment.apps/redis scaled
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+No resources found in default namespace.
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl scale deployments --all --replicas=1
+deployment.apps/java-app scaled
+deployment.apps/mysql scaled
+deployment.apps/nginx scaled
+deployment.apps/redis scaled
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+java-app-7779cf6fdc-6zv8z   0/1     ContainerCreating   0          2s
+mysql-7bc79fff45-gdffj      0/1     ContainerCreating   0          2s
+nginx-5c48d849f4-wtdxw      0/1     ContainerCreating   0          2s
+redis-7b67c6c569-rl2q2      0/1     ContainerCreating   0          2s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+java-app-7779cf6fdc-6zv8z   0/1     ContainerCreating   0          4s
+mysql-7bc79fff45-gdffj      0/1     ContainerCreating   0          4s
+nginx-5c48d849f4-wtdxw      1/1     Running             0          4s
+redis-7b67c6c569-rl2q2      0/1     ContainerCreating   0          4s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+java-app-7779cf6fdc-6zv8z   0/1     ContainerCreating   0          6s
+mysql-7bc79fff45-gdffj      0/1     ContainerCreating   0          6s
+nginx-5c48d849f4-wtdxw      1/1     Running             0          6s
+redis-7b67c6c569-rl2q2      0/1     ContainerCreating   0          6s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+java-app-7779cf6fdc-6zv8z   0/1     ContainerCreating   0          8s
+mysql-7bc79fff45-gdffj      0/1     ContainerCreating   0          8s
+nginx-5c48d849f4-wtdxw      1/1     Running             0          8s
+redis-7b67c6c569-rl2q2      0/1     ContainerCreating   0          8s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+java-app-7779cf6fdc-6zv8z   0/1     ContainerCreating   0          9s
+mysql-7bc79fff45-gdffj      0/1     ContainerCreating   0          9s
+nginx-5c48d849f4-wtdxw      1/1     Running             0          9s
+redis-7b67c6c569-rl2q2      0/1     ContainerCreating   0          9s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl describe pod java-app-7779cf6fdc-6zv8z
+Name:             java-app-7779cf6fdc-6zv8z
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             finops-lab-worker3/172.18.0.2
+Start Time:       Sat, 13 Jun 2026 19:09:53 +0000
+Labels:           app=java-app
+                  pod-template-hash=7779cf6fdc
+Annotations:      kubectl.kubernetes.io/restartedAt: 2026-06-13T18:59:25Z
+Status:           Running
+IP:               10.244.1.7
+IPs:
+  IP:           10.244.1.7
+Controlled By:  ReplicaSet/java-app-7779cf6fdc
+Containers:
+  java-app:
+    Container ID:   containerd://d25e5303d92c07317ce3eff50be9ef11c5a003ffc017781cf9ae17e9e3659077
+    Image:          springio/gs-spring-boot-docker
+    Image ID:       docker.io/springio/gs-spring-boot-docker@sha256:39c2ffc784f5f34862e22c1f2ccdbcb62430736114c13f60111eabdb79decb08
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Sat, 13 Jun 2026 19:10:15 +0000
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     4
+      memory:  4Gi
+    Requests:
+      cpu:        1
+      memory:     1Gi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-zj85d (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  kube-api-access-zj85d:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  24s   default-scheduler  Successfully assigned default/java-app-7779cf6fdc-6zv8z to finops-lab-worker3
+  Normal  Pulling    23s   kubelet            spec.containers{java-app}: Pulling image "springio/gs-spring-boot-docker"
+  Normal  Pulled     2s    kubelet            spec.containers{java-app}: Successfully pulled image "springio/gs-spring-boot-docker" in 20.227s (20.227s including waiting). Image size: 66869783 bytes.
+  Normal  Created    2s    kubelet            spec.containers{java-app}: Created container: java-app
+  Normal  Started    2s    kubelet            spec.containers{java-app}: Started container java-app
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+java-app-7779cf6fdc-6zv8z   1/1     Running             0          28s
+mysql-7bc79fff45-gdffj      0/1     ContainerCreating   0          28s
+nginx-5c48d849f4-wtdxw      1/1     Running             0          28s
+redis-7b67c6c569-rl2q2      1/1     Running             0          28s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl describe pod mysql-7bc79fff45-gdffj
+Name:             mysql-7bc79fff45-gdffj
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             finops-lab-worker/172.18.0.3
+Start Time:       Sat, 13 Jun 2026 19:09:53 +0000
+Labels:           app=mysql
+                  pod-template-hash=7bc79fff45
+Annotations:      kubectl.kubernetes.io/restartedAt: 2026-06-13T18:59:33Z
+Status:           Pending
+IP:
+IPs:              <none>
+Controlled By:    ReplicaSet/mysql-7bc79fff45
+Containers:
+  mysql:
+    Container ID:
+    Image:          mysql:8.0
+    Image ID:
+    Port:           <none>
+    Host Port:      <none>
+    State:          Waiting
+      Reason:       ContainerCreating
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     4
+      memory:  4Gi
+    Requests:
+      cpu:     1
+      memory:  1Gi
+    Environment:
+      MYSQL_ROOT_PASSWORD:  root123
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-k6v7r (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   False
+  Initialized                 True
+  Ready                       False
+  ContainersReady             False
+  PodScheduled                True
+Volumes:
+  kube-api-access-k6v7r:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  40s   default-scheduler  Successfully assigned default/mysql-7bc79fff45-gdffj to finops-lab-worker
+  Normal  Pulling    39s   kubelet            spec.containers{mysql}: Pulling image "mysql:8.0"
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+java-app-7779cf6fdc-6zv8z   1/1     Running   0          47s
+mysql-7bc79fff45-gdffj      1/1     Running   0          47s
+nginx-5c48d849f4-wtdxw      1/1     Running   0          47s
+redis-7b67c6c569-rl2q2      1/1     Running   0          47s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl top nodes
+NAME                       CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)
+finops-lab-control-plane   172m         2%       609Mi           16%
+finops-lab-worker          1169m        14%      580Mi           15%
+finops-lab-worker2         32m          0%       182Mi           4%
+finops-lab-worker3         30m          0%       365Mi           9%
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl top nodes
+NAME                       CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)
+finops-lab-control-plane   172m         2%       609Mi           16%
+finops-lab-worker          1169m        14%      580Mi           15%
+finops-lab-worker2         32m          0%       182Mi           4%
+finops-lab-worker3         30m          0%       365Mi           9%
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl scale deployments --all --replicas=2
+deployment.apps/java-app scaled
+deployment.apps/mysql scaled
+deployment.apps/nginx scaled
+deployment.apps/redis scaled
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+java-app-7779cf6fdc-6zv8z   1/1     Running             0          82s
+java-app-7779cf6fdc-gskjz   0/1     ContainerCreating   0          3s
+mysql-7bc79fff45-gdffj      1/1     Running             0          82s
+mysql-7bc79fff45-tl62r      1/1     Running             0          3s
+nginx-5c48d849f4-dzrrs      0/1     ContainerCreating   0          3s
+nginx-5c48d849f4-wtdxw      1/1     Running             0          82s
+redis-7b67c6c569-dgrwc      0/1     ContainerCreating   0          3s
+redis-7b67c6c569-rl2q2      1/1     Running             0          82s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+java-app-7779cf6fdc-6zv8z   1/1     Running   0          85s
+java-app-7779cf6fdc-gskjz   1/1     Running   0          6s
+mysql-7bc79fff45-gdffj      1/1     Running   0          85s
+mysql-7bc79fff45-tl62r      1/1     Running   0          6s
+nginx-5c48d849f4-dzrrs      1/1     Running   0          6s
+nginx-5c48d849f4-wtdxw      1/1     Running   0          85s
+redis-7b67c6c569-dgrwc      1/1     Running   0          6s
+redis-7b67c6c569-rl2q2      1/1     Running   0          85s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl top nodes
+NAME                       CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)
+finops-lab-control-plane   137m         1%       599Mi           15%
+finops-lab-worker          108m         1%       517Mi           13%
+finops-lab-worker2         25m          0%       166Mi           4%
+finops-lab-worker3         19m          0%       347Mi           9%
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl scale deployments --mysql --replicas=1
+error: unknown flag: --mysql
+See 'kubectl scale --help' for usage.
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get deploy
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+java-app   2/2     2            2           31m
+mysql      2/2     2            2           32m
+nginx      2/2     2            2           34m
+redis      2/2     2            2           33m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl scale deployments mysql --replicas=1
+deployment.apps/mysql scaled
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+java-app-7779cf6fdc-6zv8z   1/1     Running   0          5m12s
+java-app-7779cf6fdc-gskjz   1/1     Running   0          3m53s
+mysql-7bc79fff45-gdffj      1/1     Running   0          5m12s
+nginx-5c48d849f4-dzrrs      1/1     Running   0          3m53s
+nginx-5c48d849f4-wtdxw      1/1     Running   0          5m12s
+redis-7b67c6c569-dgrwc      1/1     Running   0          3m53s
+redis-7b67c6c569-rl2q2      1/1     Running   0          5m12s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl scale deployments nginx --replicas=3
+deployment.apps/nginx scaled
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+java-app-7779cf6fdc-6zv8z   1/1     Running   0          6m2s
+java-app-7779cf6fdc-gskjz   1/1     Running   0          4m43s
+mysql-7bc79fff45-gdffj      1/1     Running   0          6m2s
+nginx-5c48d849f4-dzrrs      1/1     Running   0          4m43s
+nginx-5c48d849f4-j6r44      1/1     Running   0          5s
+nginx-5c48d849f4-wtdxw      1/1     Running   0          6m2s
+redis-7b67c6c569-dgrwc      1/1     Running   0          4m43s
+redis-7b67c6c569-rl2q2      1/1     Running   0          6m2s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano stress-generator.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f stress-generator.yaml
+deployment.apps/stress-generator created
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get deployments
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+java-app           2/2     2            2           33m
+mysql              1/1     1            1           34m
+nginx              3/3     3            3           36m
+redis              2/2     2            2           35m
+stress-generator   0/1     1            0           6s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get deployments
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+java-app           2/2     2            2           33m
+mysql              1/1     1            1           34m
+nginx              3/3     3            3           36m
+redis              2/2     2            2           35m
+stress-generator   1/1     1            1           11s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods -o wide
+NAME                                READY   STATUS    RESTARTS   AGE     IP           NODE                 NOMINATED NODE   READINESS GATES
+java-app-7779cf6fdc-6zv8z           1/1     Running   0          7m13s   10.244.1.7   finops-lab-worker3   <none>           <none>
+java-app-7779cf6fdc-gskjz           1/1     Running   0          5m54s   10.244.2.8   finops-lab-worker2   <none>           <none>
+mysql-7bc79fff45-gdffj              1/1     Running   0          7m13s   10.244.3.5   finops-lab-worker    <none>           <none>
+nginx-5c48d849f4-dzrrs              1/1     Running   0          5m54s   10.244.3.6   finops-lab-worker    <none>           <none>
+nginx-5c48d849f4-j6r44              1/1     Running   0          76s     10.244.1.8   finops-lab-worker3   <none>           <none>
+nginx-5c48d849f4-wtdxw              1/1     Running   0          7m13s   10.244.2.6   finops-lab-worker2   <none>           <none>
+redis-7b67c6c569-dgrwc              1/1     Running   0          5m54s   10.244.3.7   finops-lab-worker    <none>           <none>
+redis-7b67c6c569-rl2q2              1/1     Running   0          7m13s   10.244.1.6   finops-lab-worker3   <none>           <none>
+stress-generator-74ccb5f5d4-jc6wm   1/1     Running   0          21s     10.244.2.9   finops-lab-worker2   <none>           <none>
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl describe deployment nginx
+Name:                   nginx
+Namespace:              default
+CreationTimestamp:      Sat, 13 Jun 2026 18:40:45 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 3
+Selector:               app=nginx
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:       app=nginx
+  Annotations:  kubectl.kubernetes.io/restartedAt: 2026-06-13T18:59:44Z
+  Containers:
+   nginx:
+    Image:      nginx
+    Port:       <none>
+    Host Port:  <none>
+    Limits:
+      cpu:     4
+      memory:  4Gi
+    Requests:
+      cpu:         1
+      memory:      1Gi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Progressing    True    NewReplicaSetAvailable
+  Available      True    MinimumReplicasAvailable
+OldReplicaSets:  nginx-5c56cd7b55 (0/0 replicas created), nginx-69cddb8756 (0/0 replicas created)
+NewReplicaSet:   nginx-5c48d849f4 (3/3 replicas created)
+Events:
+  Type    Reason             Age                  From                   Message
+  ----    ------             ----                 ----                   -------
+  Normal  ScalingReplicaSet  36m                  deployment-controller  Scaled up replica set nginx-5c56cd7b55 from 0 to 3
+  Normal  ScalingReplicaSet  20m                  deployment-controller  Scaled up replica set nginx-69cddb8756 from 0 to 1
+  Normal  ScalingReplicaSet  17m                  deployment-controller  Scaled down replica set nginx-69cddb8756 from 1 to 0
+  Normal  ScalingReplicaSet  7m41s                deployment-controller  Scaled down replica set nginx-5c56cd7b55 from 3 to 0
+  Normal  ScalingReplicaSet  7m41s                deployment-controller  Scaled down replica set nginx-5c48d849f4 from 1 to 0
+  Normal  ScalingReplicaSet  7m32s (x2 over 17m)  deployment-controller  Scaled up replica set nginx-5c48d849f4 from 0 to 1
+  Normal  ScalingReplicaSet  6m13s                deployment-controller  Scaled up replica set nginx-5c48d849f4 from 1 to 2
+  Normal  ScalingReplicaSet  95s                  deployment-controller  Scaled up replica set nginx-5c48d849f4 from 2 to 3
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl top pods
+NAME                                CPU(cores)   MEMORY(bytes)
+java-app-7779cf6fdc-6zv8z           2m           213Mi
+java-app-7779cf6fdc-gskjz           2m           189Mi
+mysql-7bc79fff45-gdffj              7m           355Mi
+nginx-5c48d849f4-dzrrs              0m           7Mi
+nginx-5c48d849f4-j6r44              0m           7Mi
+nginx-5c48d849f4-wtdxw              0m           7Mi
+redis-7b67c6c569-dgrwc              2m           6Mi
+redis-7b67c6c569-rl2q2              2m           5Mi
+stress-generator-74ccb5f5d4-jc6wm   948m         1Mi
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get deployments
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+java-app           2/2     2            2           35m
+mysql              1/1     1            1           35m
+nginx              3/3     3            3           37m
+redis              2/2     2            2           36m
+stress-generator   1/1     1            1           82s
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods -o wide
+NAME                                READY   STATUS    RESTARTS   AGE     IP           NODE                 NOMINATED NODE   READINESS GATES
+java-app-7779cf6fdc-6zv8z           1/1     Running   0          8m20s   10.244.1.7   finops-lab-worker3   <none>           <none>
+java-app-7779cf6fdc-gskjz           1/1     Running   0          7m1s    10.244.2.8   finops-lab-worker2   <none>           <none>
+mysql-7bc79fff45-gdffj              1/1     Running   0          8m20s   10.244.3.5   finops-lab-worker    <none>           <none>
+nginx-5c48d849f4-dzrrs              1/1     Running   0          7m1s    10.244.3.6   finops-lab-worker    <none>           <none>
+nginx-5c48d849f4-j6r44              1/1     Running   0          2m23s   10.244.1.8   finops-lab-worker3   <none>           <none>
+nginx-5c48d849f4-wtdxw              1/1     Running   0          8m20s   10.244.2.6   finops-lab-worker2   <none>           <none>
+redis-7b67c6c569-dgrwc              1/1     Running   0          7m1s    10.244.3.7   finops-lab-worker    <none>           <none>
+redis-7b67c6c569-rl2q2              1/1     Running   0          8m20s   10.244.1.6   finops-lab-worker3   <none>           <none>
+stress-generator-74ccb5f5d4-jc6wm   1/1     Running   0          88s     10.244.2.9   finops-lab-worker2   <none>           <none>
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl top pods
+NAME                                CPU(cores)   MEMORY(bytes)
+java-app-7779cf6fdc-6zv8z           2m           213Mi
+java-app-7779cf6fdc-gskjz           2m           189Mi
+mysql-7bc79fff45-gdffj              8m           355Mi
+nginx-5c48d849f4-dzrrs              0m           7Mi
+nginx-5c48d849f4-j6r44              0m           7Mi
+nginx-5c48d849f4-wtdxw              0m           7Mi
+redis-7b67c6c569-dgrwc              3m           6Mi
+redis-7b67c6c569-rl2q2              2m           5Mi
+stress-generator-74ccb5f5d4-jc6wm   1000m        0Mi
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl top nodes
+NAME                       CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)
+finops-lab-control-plane   158m         1%       603Mi           16%
+finops-lab-worker          31m          0%       492Mi           13%
+finops-lab-worker2         1029m        12%      369Mi           9%
+finops-lab-worker3         29m          0%       364Mi           9%
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano java-app
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano java-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano stress-generator.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano nginx-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano redis-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano mysql-wasteful.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano stress-generator.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f deployment stress-generator.yaml
+error: Unexpected args: [stress-generator.yaml]
+See 'kubectl apply -h' for help and examples
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl apply -f stress-generator.yaml
+deployment.apps/stress-generator configured
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl describe nodes | grep Allocatable -A5
+Allocatable:
+  cpu:                8
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             3842264Ki
+--
+Allocatable:
+  cpu:                8
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             3842264Ki
+--
+Allocatable:
+  cpu:                8
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             3842264Ki
+--
+Allocatable:
+  cpu:                8
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             3842264Ki
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods -o wide
+NAME                                READY   STATUS        RESTARTS   AGE   IP            NODE                 NOMINATED NODE   READINESS GATES
+java-app-7779cf6fdc-6zv8z           1/1     Running       0          18m   10.244.1.7    finops-lab-worker3   <none>           <none>
+java-app-7779cf6fdc-gskjz           1/1     Running       0          17m   10.244.2.8    finops-lab-worker2   <none>           <none>
+mysql-7bc79fff45-gdffj              1/1     Running       0          18m   10.244.3.5    finops-lab-worker    <none>           <none>
+nginx-5c48d849f4-dzrrs              1/1     Running       0          17m   10.244.3.6    finops-lab-worker    <none>           <none>
+nginx-5c48d849f4-j6r44              1/1     Running       0          12m   10.244.1.8    finops-lab-worker3   <none>           <none>
+nginx-5c48d849f4-wtdxw              1/1     Running       0          18m   10.244.2.6    finops-lab-worker2   <none>           <none>
+redis-7b67c6c569-dgrwc              1/1     Running       0          17m   10.244.3.7    finops-lab-worker    <none>           <none>
+redis-7b67c6c569-rl2q2              1/1     Running       0          18m   10.244.1.6    finops-lab-worker3   <none>           <none>
+stress-generator-646fbfcc84-bp2rw   1/1     Running       0          26s   10.244.2.10   finops-lab-worker2   <none>           <none>
+stress-generator-74ccb5f5d4-jc6wm   1/1     Terminating   0          11m   10.244.2.9    finops-lab-worker2   <none>           <none>
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl top nodes
+NAME                       CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)
+finops-lab-control-plane   169m         2%       611Mi           16%
+finops-lab-worker          31m          0%       489Mi           13%
+finops-lab-worker2         2936m        36%      399Mi           10%
+finops-lab-worker3         26m          0%       351Mi           9%
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ nano stress-generator.yaml
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods -A
+NAMESPACE            NAME                                               READY   STATUS    RESTARTS   AGE
+default              java-app-7779cf6fdc-6zv8z                          1/1     Running   0          19m
+default              java-app-7779cf6fdc-gskjz                          1/1     Running   0          18m
+default              mysql-7bc79fff45-gdffj                             1/1     Running   0          19m
+default              nginx-5c48d849f4-dzrrs                             1/1     Running   0          18m
+default              nginx-5c48d849f4-j6r44                             1/1     Running   0          13m
+default              nginx-5c48d849f4-wtdxw                             1/1     Running   0          19m
+default              redis-7b67c6c569-dgrwc                             1/1     Running   0          18m
+default              redis-7b67c6c569-rl2q2                             1/1     Running   0          19m
+default              stress-generator-646fbfcc84-bp2rw                  1/1     Running   0          109s
+kube-system          coredns-66bc5c9577-f6pjb                           1/1     Running   0          57m
+kube-system          coredns-66bc5c9577-txq5g                           1/1     Running   0          57m
+kube-system          etcd-finops-lab-control-plane                      1/1     Running   0          57m
+kube-system          kindnet-99nnr                                      1/1     Running   0          57m
+kube-system          kindnet-bfk4h                                      1/1     Running   0          57m
+kube-system          kindnet-h7ddx                                      1/1     Running   0          57m
+kube-system          kindnet-rsgmd                                      1/1     Running   0          57m
+kube-system          kube-apiserver-finops-lab-control-plane            1/1     Running   0          57m
+kube-system          kube-controller-manager-finops-lab-control-plane   1/1     Running   0          57m
+kube-system          kube-proxy-4xvrm                                   1/1     Running   0          57m
+kube-system          kube-proxy-c8l7m                                   1/1     Running   0          57m
+kube-system          kube-proxy-ld4rs                                   1/1     Running   0          57m
+kube-system          kube-proxy-nnm6d                                   1/1     Running   0          57m
+kube-system          kube-scheduler-finops-lab-control-plane            1/1     Running   0          57m
+kube-system          metrics-server-5b57c547cb-x88n2                    1/1     Running   0          55m
+local-path-storage   local-path-provisioner-7b8c8ddbd6-5wsc9            1/1     Running   0          57m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get deployments
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+java-app           2/2     2            2           46m
+mysql              1/1     1            1           47m
+nginx              3/3     3            3           48m
+redis              2/2     2            2           48m
+stress-generator   1/1     1            1           12m
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl top nodes
+NAME                       CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)
+finops-lab-control-plane   245m         3%       608Mi           16%
+finops-lab-worker          49m          0%       495Mi           13%
+finops-lab-worker2         2043m        25%      379Mi           10%
+finops-lab-worker3         42m          0%       359Mi           9%
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl describe nodes | grep Allocatable -A5
+Allocatable:
+  cpu:                8
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             3842264Ki
+--
+Allocatable:
+  cpu:                8
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             3842264Ki
+--
+Allocatable:
+  cpu:                8
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             3842264Ki
+--
+Allocatable:
+  cpu:                8
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             3842264Ki
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$ kubectl get pods -o wide
+NAME                                READY   STATUS    RESTARTS   AGE     IP            NODE                 NOMINATED NODE   READINESS GATES
+java-app-7779cf6fdc-6zv8z           1/1     Running   0          22m     10.244.1.7    finops-lab-worker3   <none>           <none>
+java-app-7779cf6fdc-gskjz           1/1     Running   0          21m     10.244.2.8    finops-lab-worker2   <none>           <none>
+mysql-7bc79fff45-gdffj              1/1     Running   0          22m     10.244.3.5    finops-lab-worker    <none>           <none>
+nginx-5c48d849f4-dzrrs              1/1     Running   0          21m     10.244.3.6    finops-lab-worker    <none>           <none>
+nginx-5c48d849f4-j6r44              1/1     Running   0          16m     10.244.1.8    finops-lab-worker3   <none>           <none>
+nginx-5c48d849f4-wtdxw              1/1     Running   0          22m     10.244.2.6    finops-lab-worker2   <none>           <none>
+redis-7b67c6c569-dgrwc              1/1     Running   0          21m     10.244.3.7    finops-lab-worker    <none>           <none>
+redis-7b67c6c569-rl2q2              1/1     Running   0          22m     10.244.1.6    finops-lab-worker3   <none>           <none>
+stress-generator-646fbfcc84-bp2rw   1/1     Running   0          4m27s   10.244.2.10   finops-lab-worker2   <none>           <none>
+abhijit@ABHIJIT:/mnt/c/finops-lab/apps$
