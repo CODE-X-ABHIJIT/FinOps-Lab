@@ -450,28 +450,3 @@ finops-lab/
 │
 └── README.md
 ```
-
----
-
-# Key Learnings
-
-* Kubernetes resource requests directly influence infrastructure costs.
-* Overprovisioning is a common source of waste.
-* OpenCost enables FinOps practices without a cloud account.
-* HPA improves efficiency by scaling based on demand.
-* Kubernetes automatically recovers from node failures.
-* Cost optimization can significantly reduce infrastructure requirements while maintaining service availability.
-
----
-
-# Resume Highlights
-
-* Built a multi-node Kubernetes FinOps lab using Kind, Prometheus, OpenCost, and HPA.
-* Simulated production workloads across a 3-worker-node cluster.
-* Identified overprovisioned workloads and reduced requested CPU resources by approximately 79%.
-* Implemented Horizontal Pod Autoscaling based on CPU utilization.
-* Performed node failure testing and validated Kubernetes self-healing capabilities.
-* Demonstrated infrastructure cost optimization using cloud pricing models without public cloud resources.
-
-```
-```
