@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project demonstrates how a DevOps/Platform Engineer can identify and optimize wasted Kubernetes resources using FinOps principles.
+This project demonstrates how we can identify and optimize wasted Kubernetes resources using FinOps principles.
 
 A local Kubernetes cluster was built using Kind (Kubernetes in Docker) on Windows. Multiple intentionally overprovisioned applications were deployed to simulate a poorly optimized production environment. OpenCost, Prometheus, and Kubernetes metrics were used to analyze infrastructure costs, identify waste, implement optimizations, and validate cluster resiliency.
 
